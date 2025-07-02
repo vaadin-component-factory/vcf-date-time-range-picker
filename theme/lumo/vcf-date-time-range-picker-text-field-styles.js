@@ -2,7 +2,7 @@ import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styl
 import '@vaadin/text-field/theme/lumo/vaadin-text-field.js';
 
 registerStyles(
-  'vcf-date-range-picker-text-field',
+  'vcf-date-time-range-picker-text-field',
   css`
       :not(*):placeholder-shown, /* to prevent broken styles on IE */
       :host([dir="rtl"]) [part="value"]:placeholder-shown,
@@ -61,5 +61,5 @@ registerStyles(
         padding-left:0px;
       }
       `,
-  { moduleId: 'lumo-vcf-date-range-picker-text-field' }
+  { moduleId: 'lumo-vcf-date-time-range-picker-text-field' }
 );

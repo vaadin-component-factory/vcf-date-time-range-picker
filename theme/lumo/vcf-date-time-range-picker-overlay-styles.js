@@ -4,7 +4,7 @@ import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/mixins/menu-overlay.js';
 
 registerStyles(
-  'vcf-date-range-picker-overlay',
+  'vcf-date-time-range-picker-overlay',
   css`
       [part="overlay"] {
         /*
@@ -45,5 +45,5 @@ registerStyles(
         }
       }
       `,
-  { include: ['lumo-menu-overlay'], moduleId: 'lumo-vcf-date-range-picker-overlay' }
+  { include: ['lumo-menu-overlay'], moduleId: 'lumo-vcf-date-time-range-picker-overlay' }
 );

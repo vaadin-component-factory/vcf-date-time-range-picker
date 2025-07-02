@@ -6,7 +6,7 @@
  import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
  registerStyles(
-   'vcf-date-range-picker-overlay',
+   'vcf-date-time-range-picker-overlay',
    css`
       :host {
         align-items: flex-start;
@@ -39,5 +39,5 @@
         flex: auto;
       }
       `,
-  { moduleId: 'vcf-date-range-picker-overlay-styles' }
+  { moduleId: 'vcf-date-time-range-picker-overlay-styles' }
 );

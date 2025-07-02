@@ -2,7 +2,7 @@ import { TextField } from '@vaadin/text-field';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 registerStyles(
-  'vcf-date-range-picker-text-field',
+  'vcf-date-time-range-picker-text-field',
   css`
       :host([dir="rtl"]) [part="input-field"] {
         direction: ltr;
@@ -36,18 +36,18 @@ registerStyles(
         --_lumo-text-field-overflow-mask-image: none;
       }
       `,
-  { moduleId: 'vcf-date-range-picker-text-field-styles' }
+  { moduleId: 'vcf-date-time-range-picker-text-field-styles' }
 );
 
 /**
- * An element used internally by `<vcf-date-range-picker>`. Not intended to be used separately.
+ * An element used internally by `<vcf-date-time-range-picker>`. Not intended to be used separately.
  *
  * @extends OverlayElement
  * @private
  */
-class DateRangePickerTextFieldElement extends TextField {
+class DateTimeRangePickerTextFieldElement extends TextField {
   static get is() {
-    return 'vcf-date-range-picker-text-field';
+    return 'vcf-date-time-range-picker-text-field';
   }
 
   _onClearButtonClick(event) {
@@ -67,5 +67,5 @@ class DateRangePickerTextFieldElement extends TextField {
   }
 }
 
-customElements.define(DateRangePickerTextFieldElement.is, DateRangePickerTextFieldElement);
+customElements.define(DateTimeRangePickerTextFieldElement.is, DateTimeRangePickerTextFieldElement);
 

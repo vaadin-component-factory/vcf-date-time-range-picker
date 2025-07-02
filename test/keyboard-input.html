@@ -9,7 +9,7 @@
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
 
-  <link rel="import" href="../vcf-date-range-picker.html">
+  <link rel="import" href="../vcf-date-time-range-picker.html">
   <link rel="import" href="not-animated-styles.html">
 </head>
 
@@ -17,7 +17,7 @@
 
   <test-fixture id="datepicker">
     <template>
-      <vcf-date-range-picker></vcf-date-range-picker>
+      <vcf-date-time-range-picker></vcf-date-time-range-picker>
     </template>
   </test-fixture>
 
@@ -410,7 +410,7 @@
               inputText('1/2/2000 ');
               arrowDown();
               arrowDown();
-              const overlayContent = datepicker.$.overlay.content.querySelector('vcf-date-range-picker-overlay-content').$.monthScroller;
+              const overlayContent = datepicker.$.overlay.content.querySelector('vcf-date-time-range-picker-overlay-content').$.monthScroller;
               target = overlayContent;
               esc();
               expect(datepicker.opened).to.be.false;

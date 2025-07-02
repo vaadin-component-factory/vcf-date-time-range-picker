@@ -1,4 +1,4 @@
-gemini.suite('vcf-date-range-picker', function(rootSuite) {
+gemini.suite('vcf-date-time-range-picker', function(rootSuite) {
   function wait(actions, find) {
     return actions
       .waitForJSCondition(function(window) {

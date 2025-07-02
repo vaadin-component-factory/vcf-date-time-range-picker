@@ -9,7 +9,7 @@
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
 
-  <link rel="import" href="../vcf-date-range-picker.html">
+  <link rel="import" href="../vcf-date-time-range-picker.html">
   <link rel="import" href="not-animated-styles.html">
 </head>
 
@@ -17,13 +17,13 @@
 
   <test-fixture id="datepicker">
     <template>
-      <vcf-date-range-picker value="2000-01-01"></vcf-date-range-picker>
+      <vcf-date-time-range-picker value="2000-01-01"></vcf-date-time-range-picker>
     </template>
   </test-fixture>
 
   <test-fixture id="overlay">
     <template>
-      <vcf-date-range-picker-overlay-content></vcf-date-range-picker-overlay-content>
+      <vcf-date-time-range-picker-overlay-content></vcf-date-time-range-picker-overlay-content>
     </template>
   </test-fixture>
 
@@ -82,7 +82,7 @@
           return getOverlayContent(datepicker).focusedDate;
         }
 
-        describe('date-range-picker', () => {
+        describe('date-time-range-picker', () => {
           var datepicker;
 
           beforeEach(() => {

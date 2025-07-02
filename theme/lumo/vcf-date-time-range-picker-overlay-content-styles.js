@@ -7,7 +7,7 @@ import '@vaadin/vaadin-lumo-styles/typography.js';
 import '@vaadin/button/theme/lumo/vaadin-button.js';
 
 registerStyles(
-  'vcf-date-range-picker-overlay-content',
+  'vcf-date-time-range-picker-overlay-content',
   css`
       :host {
         position: relative;
@@ -75,7 +75,7 @@ registerStyles(
         display: block;
       }
 
-      /* TODO unsupported selector, should fix this in vcf-date-range-picker that it adapts to the
+      /* TODO unsupported selector, should fix this in vcf-date-time-range-picker that it adapts to the
        * width of the year scroller */
       #scrollers[desktop] [part="months"] {
         right: auto;
@@ -191,7 +191,7 @@ registerStyles(
         content: none;
       }
 
-      /* TODO magic number (same as used for iron-media-query in vcf-date-range-picker-overlay-content) */
+      /* TODO magic number (same as used for iron-media-query in vcf-date-time-range-picker-overlay-content) */
       @media screen and (max-width: 374px) {
         :host {
           background-image: none;
@@ -206,7 +206,7 @@ registerStyles(
           margin-right: 0;
         }
 
-        /* TODO make date-range-picker adapt to the width of the years part */
+        /* TODO make date-time-range-picker adapt to the width of the years part */
         [part="years"] {
           --vaadin-infinite-scroller-buffer-width: 90px;
           width: 50px;
@@ -217,5 +217,5 @@ registerStyles(
         }
       }
     `,
-  { moduleId: 'lumo-vcf-date-range-picker-overlay-content' }
+  { moduleId: 'lumo-vcf-date-time-range-picker-overlay-content' }
 );

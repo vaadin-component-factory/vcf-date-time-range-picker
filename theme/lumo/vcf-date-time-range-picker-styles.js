@@ -3,7 +3,7 @@ import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
 
 registerStyles(
-  'vcf-date-range-picker',
+  'vcf-date-time-range-picker',
   css`
       :host {
         outline: none;
@@ -31,5 +31,5 @@ registerStyles(
         }
       }
       `,
-  { include: ['lumo-field-button'], moduleId: 'lumo-vcf-date-range-picker' }
+  { include: ['lumo-field-button'], moduleId: 'lumo-vcf-date-time-range-picker' }
 );

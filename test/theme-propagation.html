@@ -7,7 +7,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
 
-  <link rel="import" href="../vcf-date-range-picker.html">
+  <link rel="import" href="../vcf-date-time-range-picker.html">
   <link rel="import" href="not-animated-styles.html">
   <script src="common.js"></script>
 </head>
@@ -16,7 +16,7 @@
 
   <test-fixture id="datepicker-theme">
     <template>
-      <vcf-date-range-picker theme="foo"></vcf-date-range-picker>
+      <vcf-date-time-range-picker theme="foo"></vcf-date-time-range-picker>
     </template>
   </test-fixture>
 
@@ -63,7 +63,7 @@
 
       it('should propagate theme attribute to month calendar', () => {
         const monthCalendar = overlayContent.$.monthScroller
-          .querySelector('vcf-date-range-month-calendar');
+          .querySelector('vcf-date-time-range-month-calendar');
         expect(monthCalendar.getAttribute('theme')).to.equal('foo');
       });
     });

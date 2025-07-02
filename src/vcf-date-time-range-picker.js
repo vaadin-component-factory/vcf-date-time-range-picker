@@ -3,19 +3,19 @@ import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event
 import '@polymer/iron-media-query/iron-media-query.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
-import './vcf-date-range-picker-overlay.js';
+import './vcf-date-time-range-picker-overlay.js';
 
-import { DateRangePickerMixin } from './vcf-date-range-picker-mixin.js';
-import './vcf-date-range-picker-text-field.js';
+import { DateTimeRangePickerMixin } from './vcf-date-time-range-picker-mixin.js';
+import './vcf-date-time-range-picker-text-field.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 
 /**
  *
- * `<vcf-date-range-picker>` is a date selection field which includes a scrollable
+ * `<vcf-date-time-range-picker>` is a date selection field which includes a scrollable
  * month calendar view.
  * ```html
- * <vcf-date-range-picker label="Birthday"></vcf-date-range-picker>
+ * <vcf-date-time-range-picker label="Birthday"></vcf-date-time-range-picker>
  * ```
  * ```js
  * datePicker.value = '2016-03-02';
@@ -29,29 +29,29 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
  *
  * Part name | Description | Theme for Element
  * ----------------|----------------|----------------
- * `text-field` | Input element | vcf-date-range-picker
- * `clear-button` | Clear button | vcf-date-range-picker
- * `toggle-button` | Toggle button | vcf-date-range-picker
- * `overlay-content` | The overlay element | vcf-date-range-picker
- * `overlay-header` | Fullscreen mode header | vcf-date-range-picker-overlay-content
- * `label` | Fullscreen mode value/label | vcf-date-range-picker-overlay-content
- * `clear-button` | Fullscreen mode clear button | vcf-date-range-picker-overlay-content
- * `toggle-button` | Fullscreen mode toggle button | vcf-date-range-picker-overlay-content
- * `years-toggle-button` | Fullscreen mode years scroller toggle | vcf-date-range-picker-overlay-content
- * `months` | Months scroller | vcf-date-range-picker-overlay-content
- * `years` | Years scroller | vcf-date-range-picker-overlay-content
- * `toolbar` | Footer bar with buttons | vcf-date-range-picker-overlay-content
- * `today-button` | Today button | vcf-date-range-picker-overlay-content
- * `cancel-button` | Cancel button | vcf-date-range-picker-overlay-content
- * `month` | Month calendar | vcf-date-range-picker-overlay-content
- * `year-number` | Year number | vcf-date-range-picker-overlay-content
- * `year-separator` | Year separator | vcf-date-range-picker-overlay-content
- * `month-header` | Month title | vcf-date-range-month-calendar
- * `weekdays` | Weekday container | vcf-date-range-month-calendar
- * `weekday` | Weekday element | vcf-date-range-month-calendar
- * `week-numbers` | Week numbers container | vcf-date-range-month-calendar
- * `week-number` | Week number element | vcf-date-range-month-calendar
- * `date` | Date element | vcf-date-range-month-calendar
+ * `text-field` | Input element | vcf-date-time-range-picker
+ * `clear-button` | Clear button | vcf-date-time-range-picker
+ * `toggle-button` | Toggle button | vcf-date-time-range-picker
+ * `overlay-content` | The overlay element | vcf-date-time-range-picker
+ * `overlay-header` | Fullscreen mode header | vcf-date-time-range-picker-overlay-content
+ * `label` | Fullscreen mode value/label | vcf-date-time-range-picker-overlay-content
+ * `clear-button` | Fullscreen mode clear button | vcf-date-time-range-picker-overlay-content
+ * `toggle-button` | Fullscreen mode toggle button | vcf-date-time-range-picker-overlay-content
+ * `years-toggle-button` | Fullscreen mode years scroller toggle | vcf-date-time-range-picker-overlay-content
+ * `months` | Months scroller | vcf-date-time-range-picker-overlay-content
+ * `years` | Years scroller | vcf-date-time-range-picker-overlay-content
+ * `toolbar` | Footer bar with buttons | vcf-date-time-range-picker-overlay-content
+ * `today-button` | Today button | vcf-date-time-range-picker-overlay-content
+ * `cancel-button` | Cancel button | vcf-date-time-range-picker-overlay-content
+ * `month` | Month calendar | vcf-date-time-range-picker-overlay-content
+ * `year-number` | Year number | vcf-date-time-range-picker-overlay-content
+ * `year-separator` | Year separator | vcf-date-time-range-picker-overlay-content
+ * `month-header` | Month title | vcf-date-time-range-month-calendar
+ * `weekdays` | Weekday container | vcf-date-time-range-month-calendar
+ * `weekday` | Weekday element | vcf-date-time-range-month-calendar
+ * `week-numbers` | Week numbers container | vcf-date-time-range-month-calendar
+ * `week-number` | Week number element | vcf-date-time-range-month-calendar
+ * `date` | Date element | vcf-date-time-range-month-calendar
  *
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
  *
@@ -69,32 +69,32 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
  * `selected` | Set on the selected date | date
  *
  * If you want to replace the default input field with a custom implementation, you should use the
- * [`<vcf-date-range-picker-light>`](#vcf-date-range-picker-light) element.
+ * [`<vcf-date-time-range-picker-light>`](#vcf-date-time-range-picker-light) element.
  *
- * In addition to `<vcf-date-range-picker>` itself, the following internal
+ * In addition to `<vcf-date-time-range-picker>` itself, the following internal
  * components are themable:
  *
  * - `<vaadin-text-field>`
- * - `<vcf-date-range-picker-overlay>`
- * - `<vcf-date-range-picker-overlay-content>`
- * - `<vcf-date-range-month-calendar>`
+ * - `<vcf-date-time-range-picker-overlay>`
+ * - `<vcf-date-time-range-picker-overlay-content>`
+ * - `<vcf-date-time-range-month-calendar>`
  *
- * Note: the `theme` attribute value set on `<vcf-date-range-picker>` is
+ * Note: the `theme` attribute value set on `<vcf-date-time-range-picker>` is
  * propagated to the internal themable components listed above.
  *
  * @memberof Vaadin
  * @mixes Vaadin.ElementMixin
  * @mixes Vaadin.ControlStateMixin
  * @mixes Vaadin.ThemableMixin
- * @mixes Vaadin.DateRangePickerMixin
+ * @mixes Vaadin.DateTimeRangePickerMixin
  * @mixes Polymer.GestureEventListeners
  * @demo demo/index.html
  */
-  class DateRangePickerElement extends
+  class DateTimeRangePickerElement extends
   ElementMixin(
     ControlStateMixin(
       ThemableMixin(
-        DateRangePickerMixin(
+        DateTimeRangePickerMixin(
           GestureEventListeners(PolymerElement))))) {
   static get template() {
     return html`
@@ -148,7 +148,7 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
     </style>
 
     <div part="drp-container">
-      <vcf-date-range-picker-text-field id="startInput"
+      <vcf-date-time-range-picker-text-field id="startInput"
           role="application"
           autocomplete="off"
           on-focus="_focusStart"
@@ -171,16 +171,16 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
         >
         <slot name="prefix" slot="prefix"></slot>        
         <div part="helper-text" slot="helper" name="helper-text">[[helperText]]</div>
-      </vcf-date-range-picker-text-field
-      ><vcf-date-range-picker-text-field 
+      </vcf-date-time-range-picker-text-field
+      ><vcf-date-time-range-picker-text-field 
           disabled="[[disabled]]" 
           class="dash" 
           value="—" 
           invalid="[[invalid]]"
           readonly="[[readonly]]"
           hidden="[[hideTextFields]]" 
-          part="dash"></vcf-date-range-picker-text-field
-      ><vcf-date-range-picker-text-field id="endInput"
+          part="dash"></vcf-date-time-range-picker-text-field
+      ><vcf-date-time-range-picker-text-field id="endInput"
           role="application"
           autocomplete="off"
           on-focus="_focusEnd"
@@ -203,9 +203,9 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
         <slot name="prefix" slot="prefix"></slot>
         <div part="helper-end-text" slot="helper" name="helper-end-text">[[helperEndText]]</div>
         <div part="toggle-button" slot="suffix" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]"></div>
-      </vcf-date-range-picker-text-field>
+      </vcf-date-time-range-picker-text-field>
     </div>
-    <vcf-date-range-picker-overlay
+    <vcf-date-time-range-picker-overlay
         id="overlay"
         fullscreen$="[[_fullscreen]]"
         opened="{{opened}}"
@@ -214,7 +214,7 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
         on-vaadin-overlay-close="_onOverlayClosed"
         disable-upgrade>
       
-    </vcf-date-range-picker-overlay>
+    </vcf-date-time-range-picker-overlay>
     <div style="display:none">
       <slot name="presets"></slot>
     </div>
@@ -226,11 +226,11 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
     `;
   }
   static get is() {
-    return 'vcf-date-range-picker';
+    return 'vcf-date-time-range-picker';
   }
 
   static get version() {
-    return '5.0.2';
+    return '1.0.0';
   }
 
   static get properties() {
@@ -346,14 +346,14 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 
     this._inputStartElement.addEventListener('change', (e) => {
       // For change event on text-field blur, after the field is cleared,
-      // we schedule change event to be dispatched on date-range-picker blur.
+      // we schedule change event to be dispatched on date-time-range-picker blur.
       if (this._inputStartElement.value === '' && !e.__fromClearButton) {
         this.__dispatchChange = true;
       }
     });
     this._inputEndElement.addEventListener('change', (e) => {
       // For change event on text-field blur, after the field is cleared,
-      // we schedule change event to be dispatched on date-range-picker blur.
+      // we schedule change event to be dispatched on date-time-range-picker blur.
       if (this._inputEndElement.value === '' && !e.__fromClearButton) {
         this.__dispatchChange = true;
       }
@@ -480,9 +480,9 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
   }
 }
 
-customElements.define(DateRangePickerElement.is, DateRangePickerElement);
+customElements.define(DateTimeRangePickerElement.is, DateTimeRangePickerElement);
 
 /**
  * @namespace Vaadin
  */
-window.Vaadin.DateRangePickerElement = DateRangePickerElement;
+window.Vaadin.DateTimeRangePickerElement = DateTimeRangePickerElement;

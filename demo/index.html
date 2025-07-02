@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes" />
-    <title>vcf-date-range-picker demo</title>
+    <title>vcf-date-time-range-picker demo</title>
     <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
-    <script type="module" src="date-range-picker-demo.js"></script>
+    <script type="module" src="date-time-range-picker-demo.js"></script>
     <custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
         .centered {
@@ -23,7 +23,7 @@
     <script>
       window.addEventListener('WebComponentsReady', () => document.querySelector('main').classList.remove('hidden'));
       window.addEventListener('WebComponentsReady', () => document.querySelector('#test').removePreselectionById("lastMonthButton"));
-      customElements.whenDefined('vcf-date-range-picker').then(function() {
+      customElements.whenDefined('vcf-date-time-range-picker').then(function() {
         const button = document.querySelector('#may2021MonthButton');
         const dateRangePicker = document.querySelector('#test');
         dateRangePicker.setClassNameForDates("publicHolidays", ["2021-05-01","2021-05-25"]);
@@ -59,29 +59,29 @@
       <h3>Basic usage</h3>
       <demo-snippet>
         <template preserve-content>
-          <vcf-date-range-picker id="test" label="Enter date range">
+          <vcf-date-time-range-picker id="test" label="Enter date range">
             <vaadin-button id="may2021MonthButton" theme="tertiary" part="preset-button" on-tap="document.querySelector('#test')" slot="presets">
               May 2021
             </vaadin-button>
-          </vcf-date-range-picker>
-          <vcf-date-range-picker placeholder="Enter start date" end-placeholder="Enter end date"></vcf-date-range-picker>
-          <vcf-date-range-picker value="1990-01-28" end-value="1990-01-30"></vcf-date-range-picker>
+          </vcf-date-time-range-picker>
+          <vcf-date-time-range-picker placeholder="Enter start date" end-placeholder="Enter end date"></vcf-date-time-range-picker>
+          <vcf-date-time-range-picker value="1990-01-28" end-value="1990-01-30"></vcf-date-time-range-picker>
         </template>
       </demo-snippet>
   
       <h3>Disabled and read-only</h3>
       <demo-snippet>
         <template preserve-content>
-          <vcf-date-range-picker disabled label="Disabled" value="1990-01-28"></vcf-date-range-picker>
-          <vcf-date-range-picker readonly label="Read-only" value="1990-01-28"></vcf-date-range-picker>
+          <vcf-date-time-range-picker disabled label="Disabled" value="1990-01-28"></vcf-date-time-range-picker>
+          <vcf-date-time-range-picker readonly label="Read-only" value="1990-01-28"></vcf-date-time-range-picker>
         </template>
       </demo-snippet>
 
       <h3>Date Range Picker without visible textfields</h3>
       <p>Click the button to open the date range picker</p>
-      <demo-snippet id="auto-open-disabled" when-defined="vcf-date-range-picker">
+      <demo-snippet id="auto-open-disabled" when-defined="vcf-date-time-range-picker">
         <template preserve-content>
-          <vcf-date-range-picker id="withoutTextFields" label="Label" auto-open-disabled hide-text-fields></vcf-date-range-picker>
+          <vcf-date-time-range-picker id="withoutTextFields" label="Label" auto-open-disabled hide-text-fields></vcf-date-time-range-picker>
           <vaadin-button id="openDateRangePicker">Open Date Range Picker</vaadin-button>
           <span id="selectedRange"></span>
         </template>
@@ -90,7 +90,7 @@
       <h3>Clear button</h3>
       <demo-snippet>
         <template preserve-content>
-          <vcf-date-range-picker clear-button-visible label="Super long super long super long super long super long super long super long super long super  label" value="1990-01-28" error-message="Super long super long super long super long super long super long super long super long super error "></vcf-date-range-picker>
+          <vcf-date-time-range-picker clear-button-visible label="Super long super long super long super long super long super long super long super long super  label" value="1990-01-28" error-message="Super long super long super long super long super long super long super long super long super error "></vcf-date-time-range-picker>
         </template>
       </demo-snippet>
 
@@ -101,11 +101,11 @@
             <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
             <vaadin-text-field label="Last Name" value="Smith"></vaadin-text-field>
             <vaadin-text-field label="Address" value="A place"></vaadin-text-field>
-            <vcf-date-range-picker clear-button-visible label="Super long super long super long super long super long super long super long super long super  label" value="1990-01-28" error-message="Super long super long super long super long super long super long super long super long super error "></vcf-date-range-picker>
+            <vcf-date-time-range-picker clear-button-visible label="Super long super long super long super long super long super long super long super long super  label" value="1990-01-28" error-message="Super long super long super long super long super long super long super long super long super error "></vcf-date-time-range-picker>
             <vaadin-text-field label="Email" value="jane.doe@example.com"></vaadin-text-field>
             <vaadin-date-picker label="Birthday" value="1993-06-23"></vaadin-date-picker>
             <vaadin-text-area label="Bio" colspan="2" value="My name is Jane."></vaadin-text-area>
-            <vcf-date-range-picker colspan="2" clear-button-visible label="Super long super long super long super long super long super long super long super long super  label" value="1990-01-28" error-message="Super long super long super long super long super long super long super long super long super error "></vcf-date-range-picker>
+            <vcf-date-time-range-picker colspan="2" clear-button-visible label="Super long super long super long super long super long super long super long super long super  label" value="1990-01-28" error-message="Super long super long super long super long super long super long super long super long super error "></vcf-date-time-range-picker>
           </vaadin-form-layout>
         </template>
       </demo-snippet>
@@ -114,20 +114,20 @@
       <p>Use the <code>helper-text</code> attribute or add content to the <code>helper</code> slot to set helper content.</p>
       <demo-snippet id="helper-text">
         <template preserve-content>
-          <vcf-date-range-picker hide-side-panel label="Event date">
+          <vcf-date-time-range-picker hide-side-panel label="Event date">
             <span slot="helper">International date format</span>
-          </vcf-date-range-picker>
+          </vcf-date-time-range-picker>
         </template>
       </demo-snippet>
   
       <h3>Value change event</h3>
-      <demo-snippet id="value-change-event" when-defined="vcf-date-range-picker">
+      <demo-snippet id="value-change-event" when-defined="vcf-date-time-range-picker">
         <template preserve-content>
-          <vcf-date-range-picker label="Label"></vcf-date-range-picker>
+          <vcf-date-time-range-picker label="Label"></vcf-date-time-range-picker>
           <div>Selected value: <span id="output"></span></div>
           <script>
             // window.addDemoReadyListener('#value-change-event', function(document) {
-            //   const datePicker = document.querySelector('vcf-date-range-picker');
+            //   const datePicker = document.querySelector('vcf-date-time-range-picker');
             //   const output = document.querySelector('#output');
             //   datePicker.addEventListener('change', function(event) {
             //     output.textContent = event.target.value;
@@ -139,9 +139,9 @@
   
       <h3>Auto open disabled</h3>
       <p>Dropdown is only opened when clicking the toggle button or pressing Up or Down arrow keys.</p>
-      <demo-snippet id="auto-open-disabled" when-defined="vcf-date-range-picker">
+      <demo-snippet id="auto-open-disabled" when-defined="vcf-date-time-range-picker">
         <template preserve-content>
-          <vcf-date-range-picker label="Label" auto-open-disabled></vcf-date-range-picker>
+          <vcf-date-time-range-picker label="Label" auto-open-disabled></vcf-date-time-range-picker>
         </template>
       </demo-snippet>
 

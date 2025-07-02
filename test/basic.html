@@ -7,7 +7,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
 
-  <link rel="import" href="../vcf-date-range-picker.html">
+  <link rel="import" href="../vcf-date-time-range-picker.html">
   <link rel="import" href="not-animated-styles.html">
   <script src="common.js"></script>
 </head>
@@ -16,13 +16,13 @@
 
   <test-fixture id="datepicker">
     <template>
-      <vcf-date-range-picker></vcf-date-range-picker>
+      <vcf-date-time-range-picker></vcf-date-time-range-picker>
     </template>
   </test-fixture>
 
   <test-fixture id="datepicker-prefix">
     <template>
-      <vcf-date-range-picker><div slot="prefix">foo</div></vcf-date-range-picker>
+      <vcf-date-time-range-picker><div slot="prefix">foo</div></vcf-date-time-range-picker>
     </template>
   </test-fixture>
 
@@ -30,7 +30,7 @@
     <template>
       <div style="height: 100px; overflow: scroll;">
         <div style="height: 1000px;">
-          <vcf-date-range-picker></vcf-date-range-picker>
+          <vcf-date-time-range-picker></vcf-date-time-range-picker>
         </div>
       </div>
     </template>
@@ -39,22 +39,22 @@
   <test-fixture id="datepicker-in-flexbox">
     <template>
       <div style="display: flex; flex-direction: column; width:500px;">
-        <vcf-date-range-picker></vcf-date-range-picker>
+        <vcf-date-time-range-picker></vcf-date-time-range-picker>
       </div>
     </template>
   </test-fixture>
 
   <test-fixture id="datepicker-clear-button-visible">
     <template>
-      <vcf-date-range-picker clear-button-visible></vcf-date-range-picker>
+      <vcf-date-time-range-picker clear-button-visible></vcf-date-time-range-picker>
     </template>
   </test-fixture>
 
   <test-fixture id="datepicker-with-slotted-helper">
     <template>
-      <vcf-date-range-picker>
+      <vcf-date-time-range-picker>
         <div slot="helper">foo</div>
-      </vcf-date-range-picker>
+      </vcf-date-time-range-picker>
     </template>
   </test-fixture>
 
@@ -333,7 +333,7 @@
           datepicker.close();
 
           var container = fixture('datepicker-wrapped');
-          var datepickerWrapped = container.querySelector('vcf-date-range-picker');
+          var datepickerWrapped = container.querySelector('vcf-date-time-range-picker');
 
           open(datepickerWrapped, () => {
             sinon.stub(datepickerWrapped, '_updateAlignmentAndPosition', () => {
@@ -346,7 +346,7 @@
           });
         });
 
-        if (!ios) { // https://github.com/vaadin/vcf-date-range-picker/issues/330
+        if (!ios) { // https://github.com/vaadin/vcf-date-time-range-picker/issues/330
           it('should not realign on year/month scroll', done => {
             var spy = sinon.spy(datepicker, '_updateAlignmentAndPosition');
             getOverlayContent(datepicker).$.yearScroller.$.scroller.scrollTop += 100;
@@ -371,7 +371,7 @@
 
         it('should match the parent width', () => {
           var container = fixture('datepicker-wrapped').querySelector('div');
-          var datepickerWrapped = container.querySelector('vcf-date-range-picker');
+          var datepickerWrapped = container.querySelector('vcf-date-time-range-picker');
           container.style.width = '120px';
           datepickerWrapped.style.width = '100%';
           expect(datepickerWrapped.$.input.clientWidth).to.equal(120);
@@ -466,7 +466,7 @@
         });
 
         it('should notify i18n mutation to children', () => {
-          var monthCalendar = overlayContent.$.monthScroller.querySelector('vcf-date-range-month-calendar');
+          var monthCalendar = overlayContent.$.monthScroller.querySelector('vcf-date-time-range-month-calendar');
           var weekdays = monthCalendar.$.monthGrid.querySelectorAll('[part="weekday"]:not(:empty)');
           var weekdayLabels = Array.prototype.map.call(weekdays,
             weekday => weekday.getAttribute('aria-label'));
@@ -637,9 +637,9 @@
       });
 
       describe('Inside flexbox', () => {
-        it('date-range-picker should stretch to fit the column flex container', () => {
+        it('date-time-range-picker should stretch to fit the column flex container', () => {
           const container = fixture('datepicker-in-flexbox');
-          const flexDatePicker = container.querySelector('vcf-date-range-picker');
+          const flexDatePicker = container.querySelector('vcf-date-time-range-picker');
           expect(window.getComputedStyle(container).width).to.eql('500px');
           expect(window.getComputedStyle(flexDatePicker).width).to.eql('500px');
         });

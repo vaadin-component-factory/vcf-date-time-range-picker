@@ -16,7 +16,7 @@
 
   <test-fixture id="datepicker">
     <template>
-      <vcf-date-range-picker></vcf-date-range-picker>
+      <vcf-date-time-range-picker></vcf-date-time-range-picker>
     </template>
   </test-fixture>
 
@@ -38,7 +38,7 @@
         var is = Polymer.Element ? datepicker instanceof Polymer.Element : Polymer.isInstance(datepicker);
         expect(is).to.be.false;
 
-        Polymer.importHref('../vcf-date-range-picker.html', () => {
+        Polymer.importHref('../vcf-date-time-range-picker.html', () => {
           expect(datepicker.value).to.equal('2000-01-01');
           done();
         });

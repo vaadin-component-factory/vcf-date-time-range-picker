@@ -17,7 +17,7 @@
     </template>
   </dom-module>
 
-  <dom-module id="month-calendar-test-styles" theme-for="vcf-date-range-month-calendar">
+  <dom-module id="month-calendar-test-styles" theme-for="vcf-date-time-range-month-calendar">
     <template>
       <style>
         :host(:not([focused])) [part="date"][focused]::before {
@@ -29,7 +29,7 @@
 
   <script>
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vcf-date-range-picker.html">`);
+    document.write(`<link rel="import" href="../../theme/${theme}/vcf-date-time-range-picker.html">`);
   </script>
 </head>
 
@@ -37,24 +37,24 @@
 
   <div id="dropdown-tests" style="padding: 10px;">
     Plain
-    <vcf-date-range-picker id="plain" initial-position="2013-04-27"></vcf-date-range-picker>
+    <vcf-date-time-range-picker id="plain" initial-position="2013-04-27"></vcf-date-time-range-picker>
 
     <br>Pre-selected value
-    <vcf-date-range-picker value="1991-12-20" id="selected-value"></vcf-date-range-picker>
+    <vcf-date-time-range-picker value="1991-12-20" id="selected-value"></vcf-date-time-range-picker>
 
     <br>Date limit
-    <vcf-date-range-picker min="2017-06-10" max="2017-06-29" initial-position="2017-06-15" id="date-limit"></vcf-date-range-picker>
+    <vcf-date-time-range-picker min="2017-06-10" max="2017-06-29" initial-position="2017-06-15" id="date-limit"></vcf-date-time-range-picker>
 
     <br>Week numbers
-    <vcf-date-range-picker show-week-numbers id="weeks" initial-position="2018-04-28"></vcf-date-range-picker>    
+    <vcf-date-time-range-picker show-week-numbers id="weeks" initial-position="2018-04-28"></vcf-date-time-range-picker>    
   </div>
 
   <script>
     window.addEventListener('WebComponentsReady', function() {
-      var datepicker = document.querySelector('vcf-date-range-picker#weeks');
+      var datepicker = document.querySelector('vcf-date-time-range-picker#weeks');
       datepicker.set('i18n.firstDayOfWeek', 1);
 
-      [].forEach.call(document.querySelectorAll('vcf-date-range-picker'), function(d) {
+      [].forEach.call(document.querySelectorAll('vcf-date-time-range-picker'), function(d) {
         d.$.input.addEventListener('focus', function(e) {
           // Make sure the input doesn't have a blinking caret that might fail the test
           e.target.blur();
@@ -68,7 +68,7 @@
     });
 
     function closeDatePickers() {
-      var datePickers = document.querySelectorAll('vcf-date-range-picker');
+      var datePickers = document.querySelectorAll('vcf-date-time-range-picker');
 
       [].forEach.call(datePickers, function(datePicker) {
         datePicker.close();

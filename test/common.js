@@ -117,8 +117,8 @@ function monkeyPatchNativeFocus() {
     };
   });
 
-  customElements.whenDefined('vcf-date-range-picker').then(() => {
-    const DateRangePickerElement = customElements.get('vcf-date-range-picker');
+  customElements.whenDefined('vcf-date-time-range-picker').then(() => {
+    const DateRangePickerElement = customElements.get('vcf-date-time-range-picker');
     DateRangePickerElement.prototype.blur = function() {
       this._inputElement._setFocused(false);
     };

@@ -1,5 +1,5 @@
 import { IronA11yKeysBehavior } from '@polymer/iron-a11y-keys-behavior/iron-a11y-keys-behavior.js';
-import { dateAllowed, dateEquals, extractDateParts, getClosestDate } from './vcf-date-range-picker-helper.js';
+import { dateAllowed, dateEquals, extractDateParts, getClosestDate } from './vcf-date-time-range-picker-helper.js';
 import { addListener } from '@polymer/polymer/lib/utils/gestures.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
@@ -12,7 +12,7 @@ import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 /**
  * @polymerMixin
  */
-export const DateRangePickerMixin = (subclass) =>
+export const DateTimeRangePickerMixin = (subclass) =>
   class VaadinDatePickerMixin extends OverlayClassMixin(
     ControllerMixin(DelegateFocusMixin(InputConstraintsMixin(KeyboardMixin(subclass)))),) {
   static get properties() {
@@ -618,7 +618,7 @@ export const DateRangePickerMixin = (subclass) =>
     }
 
     // Create and store document content element
-    const content = document.createElement('vcf-date-range-picker-overlay-content');
+    const content = document.createElement('vcf-date-time-range-picker-overlay-content');
     root.appendChild(content);
 
     this._overlayContent = content;
