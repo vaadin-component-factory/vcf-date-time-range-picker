@@ -63,7 +63,7 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
     }
 
   static get is() {
-    return 'vcf-date-range-infinite-scroller';
+    return 'vcf-date-time-range-infinite-scroller';
   }
 
   static get properties() {

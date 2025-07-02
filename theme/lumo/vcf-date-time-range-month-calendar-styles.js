@@ -6,7 +6,7 @@ import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
 
 registerStyles(
-  'vcf-date-range-month-calendar',
+  'vcf-date-time-range-month-calendar',
   css`
       :host {
         -moz-user-select: none;
@@ -95,10 +95,10 @@ registerStyles(
       }
 
       :host(:not([focused])) [part="date"][focused]::before {
-        animation: vcf-date-range-picker-month-calendar-focus-date 1.4s infinite;
+        animation: vcf-date-time-range-picker-month-calendar-focus-date 1.4s infinite;
       }
 
-      @keyframes vcf-date-range-picker-month-calendar-focus-date {
+      @keyframes vcf-date-time-range-picker-month-calendar-focus-date {
         50% {
           box-shadow: 0 0 0 2px transparent;
         }
@@ -162,14 +162,14 @@ registerStyles(
         color: var(--lumo-disabled-text-color) !important;
       }
       `,
-  { moduleId: 'lumo-vcf-date-range-month-calendar' }
+  { moduleId: 'lumo-vcf-date-time-range-month-calendar' }
 );
 
 const $_documentContainer = document.createElement('template');
 
 $_documentContainer.innerHTML = `
   <style>
-    @keyframes vcf-date-range-picker-month-calendar-focus-date {
+    @keyframes vcf-date-time-range-picker-month-calendar-focus-date {
       50% {
         box-shadow: 0 0 0 2px transparent;
       }

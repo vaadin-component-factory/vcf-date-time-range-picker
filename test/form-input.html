@@ -9,37 +9,37 @@
   <link rel="import" href="../../test-fixture/test-fixture.html">
 
   <link rel="import" href="../../iron-form/iron-form.html">
-  <link rel="import" href="../vcf-date-range-picker.html">
+  <link rel="import" href="../vcf-date-time-range-picker.html">
   <link rel="import" href="not-animated-styles.html">
 </head>
 
 <body>
   <script>
-    customElements.whenDefined('vcf-date-range-picker').then(() => {
-      class DatePicker2016Element extends customElements.get('vcf-date-range-picker') {
+    customElements.whenDefined('vcf-date-time-range-picker').then(() => {
+      class DatePicker2016Element extends customElements.get('vcf-date-time-range-picker') {
         checkValidity(value) {
           return new Date(value).getFullYear() === 2016;
         }
       }
-      customElements.define('vcf-date-range-picker-2016', DatePicker2016Element);
+      customElements.define('vcf-date-time-range-picker-2016', DatePicker2016Element);
     });
   </script>
 
   <test-fixture id="custom-validation">
     <template>
-      <vcf-date-range-picker-2016></vcf-date-range-picker-2016>
+      <vcf-date-time-range-picker-2016></vcf-date-time-range-picker-2016>
     </template>
   </test-fixture>
 
   <test-fixture id="datepicker">
     <template>
-      <vcf-date-range-picker></vcf-date-range-picker>
+      <vcf-date-time-range-picker></vcf-date-time-range-picker>
     </template>
   </test-fixture>
 
   <test-fixture id="datepicker-required">
     <template>
-      <vcf-date-range-picker required></vcf-date-range-picker>
+      <vcf-date-time-range-picker required></vcf-date-time-range-picker>
     </template>
   </test-fixture>
 
@@ -47,7 +47,7 @@
     <template>
       <iron-form>
         <form>
-          <vcf-date-range-picker name="foo"></vcf-date-range-picker>
+          <vcf-date-time-range-picker name="foo"></vcf-date-time-range-picker>
         </form>
       </iron-form>
     </template>
@@ -255,7 +255,7 @@
 
       beforeEach(done => {
         ironForm = fixture('datepicker-in-form');
-        datepicker = ironForm.querySelector('vcf-date-range-picker');
+        datepicker = ironForm.querySelector('vcf-date-time-range-picker');
         setTimeout(done);
       });
 

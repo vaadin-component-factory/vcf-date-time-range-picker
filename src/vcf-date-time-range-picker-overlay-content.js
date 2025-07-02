@@ -9,16 +9,16 @@ import '@polymer/iron-media-query/iron-media-query.js';
 import '@vaadin/button/src/vaadin-button.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import './vcf-date-range-month-calendar.js';
-import './vcf-date-range-infinite-scroller.js';
-import { dateEquals, getClosestDate, getISOWeekNumber, extractDateParts } from './vcf-date-range-picker-helper.js';
-import './vcf-date-range-picker-styles.js';
+import './vcf-date-time-range-month-calendar.js';
+import './vcf-date-time-range-infinite-scroller.js';
+import { dateEquals, getClosestDate, getISOWeekNumber, extractDateParts } from './vcf-date-time-range-picker-helper.js';
+import './vcf-date-time-range-picker-styles.js';
 
 /**
  * @extends HTMLElement
  * @private
  */
-class DatePickerOverlayContentElement extends ThemableMixin(DirMixin(GestureEventListeners(PolymerElement))) {
+class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(GestureEventListeners(PolymerElement))) {
   static get template() {
     return html`
     <style>
@@ -215,9 +215,9 @@ class DatePickerOverlayContentElement extends ThemableMixin(DirMixin(GestureEven
     </div>
 
     <div id="scrollers" desktop$="[[_desktopMode]]" on-track="_track">
-      <vcf-date-range-infinite-scroller id="monthScroller" on-custom-scroll="_onMonthScroll" on-touchstart="_onMonthScrollTouchStart" buffer-size="3" active="[[initialPosition]]" part="months">
+      <vcf-date-time-range-infinite-scroller id="monthScroller" on-custom-scroll="_onMonthScroll" on-touchstart="_onMonthScrollTouchStart" buffer-size="3" active="[[initialPosition]]" part="months">
         <template>
-          <vcf-date-range-month-calendar
+          <vcf-date-time-range-month-calendar
             i18n="[[i18n]]"
             month="[[_dateAfterXMonths(index)]]"
             selected-start-date="{{selectedStartDate}}"
@@ -232,17 +232,17 @@ class DatePickerOverlayContentElement extends ThemableMixin(DirMixin(GestureEven
             focused$="[[_focused]]"
             part="month"
             theme$="[[theme]]">
-          </vcf-date-range-month-calendar>
+          </vcf-date-time-range-month-calendar>
         </template>
-      </vcf-date-range-infinite-scroller>
-      <vcf-date-range-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-custom-scroll="_onYearScroll" on-touchstart="_onYearScrollTouchStart" buffer-size="12" active="[[initialPosition]]" part="years">
+      </vcf-date-time-range-infinite-scroller>
+      <vcf-date-time-range-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-custom-scroll="_onYearScroll" on-touchstart="_onYearScrollTouchStart" buffer-size="12" active="[[initialPosition]]" part="years">
         <template>
           <div part="year-number" role="button" current$="[[_isCurrentYear(index)]]" selected$="[[_isSelectedYear(index, selectedStartDate)]]">
             [[_yearAfterXYears(index)]]
           </div>
           <div part="year-separator" aria-hidden="true"></div>
         </template>
-      </vcf-date-range-infinite-scroller>
+      </vcf-date-time-range-infinite-scroller>
     </div>
 
 
@@ -251,7 +251,7 @@ class DatePickerOverlayContentElement extends ThemableMixin(DirMixin(GestureEven
   }
 
   static get is() {
-    return 'vcf-date-range-picker-overlay-content';
+    return 'vcf-date-time-range-picker-overlay-content';
   }
 
   static get properties() {
@@ -1084,5 +1084,5 @@ class DatePickerOverlayContentElement extends ThemableMixin(DirMixin(GestureEven
   }
 }
 
-customElements.define(DatePickerOverlayContentElement.is, DatePickerOverlayContentElement);
+customElements.define(DateTimePickerOverlayContentElement.is, DateTimePickerOverlayContentElement);
 

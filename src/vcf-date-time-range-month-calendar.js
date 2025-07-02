@@ -2,7 +2,7 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { dateBetween, dateAllowed, dateEquals, getISOWeekNumber } from './vcf-date-range-picker-helper.js';
+import { dateBetween, dateAllowed, dateEquals, getISOWeekNumber } from './vcf-date-time-range-picker-helper.js';
  
  /**
   * @extends HTMLElement
@@ -94,7 +94,7 @@ class MonthCalendarElement extends ThemableMixin(GestureEventListeners(PolymerEl
 
 
   static get is() {
-    return 'vcf-date-range-month-calendar';
+    return 'vcf-date-time-range-month-calendar';
   }
 
   static get properties() {

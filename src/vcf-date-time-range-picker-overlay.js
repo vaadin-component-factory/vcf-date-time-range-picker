@@ -1,6 +1,6 @@
 import { Overlay } from '@vaadin/overlay/src/vaadin-overlay.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
-import './vcf-date-range-picker-overlay-content.js';
+import './vcf-date-time-range-picker-overlay-content.js';
 
 /**
  * The overlay element.
@@ -8,7 +8,7 @@ import './vcf-date-range-picker-overlay-content.js';
  * ### Styling
  *
  * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/src/vaadin-overlay.html)
- * for `<vcf-date-range-picker-overlay>` parts.
+ * for `<vcf-date-time-range-picker-overlay>` parts.
  *
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
  *
@@ -16,11 +16,11 @@ import './vcf-date-range-picker-overlay-content.js';
  * @memberof Vaadin
  * @private
  */
-class DateRangePickerOverlayElement extends PositionMixin(Overlay) {
+class DateTimeRangePickerOverlayElement extends PositionMixin(Overlay) {
   static get is() {
-    return 'vcf-date-range-picker-overlay';
+    return 'vcf-date-time-range-picker-overlay';
   }
 
 }
 
-customElements.define(DateRangePickerOverlayElement.is, DateRangePickerOverlayElement);
+customElements.define(DateTimeRangePickerOverlayElement.is, DateTimeRangePickerOverlayElement);

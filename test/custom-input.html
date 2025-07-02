@@ -10,27 +10,27 @@
   <script src="common.js"></script>
 
   <link rel="import" href="../../iron-input/iron-input.html">
-  <link rel="import" href="../vcf-date-range-picker-light.html">
+  <link rel="import" href="../vcf-date-time-range-picker-light.html">
 </head>
 
 <body>
   <test-fixture id="custom-input-datepicker">
     <template>
-      <vcf-date-range-picker-light>
+      <vcf-date-time-range-picker-light>
         <iron-input>
           <input>
         </iron-input>
-      </vcf-date-range-picker-light>
+      </vcf-date-time-range-picker-light>
     </template>
   </test-fixture>
 
   <test-fixture id="custom-input-datepicker-theme">
     <template>
-      <vcf-date-range-picker-light theme="foo">
+      <vcf-date-time-range-picker-light theme="foo">
         <iron-input>
           <input>
         </iron-input>
-      </vcf-date-range-picker-light>
+      </vcf-date-time-range-picker-light>
     </template>
   </test-fixture>
 
@@ -111,7 +111,7 @@
 
         it('should propagate theme attribute to month calendar', () => {
           const monthCalendar = overlayContent.$.monthScroller
-            .querySelector('vcf-date-range-month-calendar');
+            .querySelector('vcf-date-time-range-month-calendar');
           expect(monthCalendar.getAttribute('theme')).to.equal('foo');
         });
       });

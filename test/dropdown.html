@@ -7,7 +7,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
-  <link rel="import" href="../vcf-date-range-picker.html">
+  <link rel="import" href="../vcf-date-time-range-picker.html">
   <link rel="import" href="not-animated-styles.html">
   <script src="common.js"></script>
 </head>
@@ -16,25 +16,25 @@
 
   <test-fixture id="datepicker">
     <template>
-      <vcf-date-range-picker style="position: fixed;"></vcf-date-range-picker>
+      <vcf-date-time-range-picker style="position: fixed;"></vcf-date-time-range-picker>
     </template>
   </test-fixture>
 
   <test-fixture id="datepicker-wrapped">
     <template>
-      <vcf-date-range-picker-wrapper></vcf-date-range-picker-wrapper>
+      <vcf-date-time-range-picker-wrapper></vcf-date-time-range-picker-wrapper>
     </template>
   </test-fixture>
 
-  <dom-module id="vcf-date-range-picker-wrapper">
+  <dom-module id="vcf-date-time-range-picker-wrapper">
     <template>
-      <vcf-date-range-picker id="datepicker" label="foo" clear-button-visible>
-      </vcf-date-range-picker>
+      <vcf-date-time-range-picker id="datepicker" label="foo" clear-button-visible>
+      </vcf-date-time-range-picker>
     </template>
     <script>
-      customElements.whenDefined('vcf-date-range-picker').then(() => {
+      customElements.whenDefined('vcf-date-time-range-picker').then(() => {
         Polymer({
-          is: 'vcf-date-range-picker-wrapper'
+          is: 'vcf-date-time-range-picker-wrapper'
         });
       });
     </script>
