@@ -39,6 +39,7 @@
     "@vaadin/overlay": "24.8.2",
     "@vaadin/polymer-legacy-adapter": "24.8.2",
     "@vaadin/text-field": "24.8.2",
+    "@vaadin/time-picker": "24.8.2",
     "@vaadin/vaadin-control-state-mixin": "21.0.5",
     "@vaadin/vaadin-lumo-styles": "24.8.2",
     "@vaadin/vaadin-themable-mixin": "24.8.2"

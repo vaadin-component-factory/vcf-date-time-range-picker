@@ -372,8 +372,25 @@ export const DateTimeRangePickerMixin = (subclass) =>
       },
 
       /** @protected */
-      _overlayInitialized: Boolean
-    };
+      _overlayInitialized: Boolean,
+
+          /**
+      * The start time in 'HH:mm:ss' format.
+      * @type {string}
+      */
+      _selectedStartTime: {
+        type: String,
+        notify: true
+      },
+      /**
+       * The end time in 'HH:mm:ss' format.
+       * @type {string}
+       */
+      _selectedEndTime: {
+        type: String,
+        notify: true
+      },
+    };    
   }
 
   static get observers() {
@@ -455,33 +472,36 @@ export const DateTimeRangePickerMixin = (subclass) =>
 
     // new stuff from v24
 
-    const isClearButton = e => {
-      const path = e.composedPath();
-      // FIX: Just using inputStartElement, but don't know what to do
-      const inputIndex = path.indexOf(this._inputStartElement);
-      return path.slice(0, inputIndex)
-        .filter(el => el.getAttribute && el.getAttribute('part') === 'clear-button')
-        .length === 1;
-    };
+    // const isClearButton = e => {
+    //   const path = e.composedPath();
+    //   // FIX: Just using inputStartElement, but don't know what to do
+    //   const inputIndex = path.indexOf(this._timeEndElement);
+    //   return path.slice(0, inputIndex)
+    //     .filter(el => el.getAttribute && el.getAttribute('part') === 'clear-button')
+    //     .length === 1;
+    // };
 
     addListener(this, 'tap', e => {
       // FIXME(platosha): use preventDefault in the text field clear button,
       // then the following composedPath check could be simplified down
       // to `if (!e.defaultPrevented)`.
       // https://github.com/vaadin/vaadin-text-field/issues/352
-      if (!isClearButton(e) && (!this.autoOpenDisabled || this._noInput)) {
+      if (!this._isClearButton(e) && (!this.autoOpenDisabled || this._noInput)) {
         this.open();
       }
     });
 
     this.addEventListener('touchend', e => {
-      if (!isClearButton(e)) {
+      if (!this._isClearButton(e)) {
         e.preventDefault();
       }
     });
     this.addEventListener('keydown', this._onKeydown.bind(this));
     this._inputStartElement.addEventListener('input', this._onUserInputStart.bind(this));
     this._inputEndElement.addEventListener('input', this._onUserInputEnd.bind(this));
+
+    // TODO add same as above for time??
+
     this.addEventListener('focus', e => this._noInput && e.target.blur());
     this.addEventListener('blur', e => {
       if (!this.opened) {
@@ -673,6 +693,22 @@ export const DateTimeRangePickerMixin = (subclass) =>
     return this._inputEnd();
   }
 
+  /**
+    * @return {HTMLElement}
+    * @protected
+    */
+  get _timeStartElement() {
+    return this._timeStart();
+  }
+
+  /**
+    * @return {HTMLElement}
+    * @protected
+    */
+  get _timeEndElement() {
+    return this._timeEnd();
+  }
+
   /** @private */
   /** FIX: Just replaced with inputStartElement, don't know what to do */
   get _nativeInput() {
@@ -706,7 +742,7 @@ export const DateTimeRangePickerMixin = (subclass) =>
   }
 
   /** @private */
-  _formatISO(date) {
+  _formatISO(date, time) {
     if (!(date instanceof Date)) {
       return '';
     }
@@ -728,7 +764,14 @@ export const DateTimeRangePickerMixin = (subclass) =>
     const year = yearSign + pad(yearAbs, yearFmt);
     const month = pad(date.getMonth() + 1);
     const day = pad(date.getDate());
-    return [year, month, day].join('-');
+    const datePart = [year, month, day].join('-');
+    // return [year, month, day].join('-');
+
+    // Combine date and time if time is provided
+    if (time) {
+      return `${datePart}T${time}`;
+    }
+    return datePart;
   }
 
   /** @private */
@@ -832,30 +875,60 @@ export const DateTimeRangePickerMixin = (subclass) =>
     if (this.__dispatchChange) {
       this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
     }
-    var startDate = this._extractStartDate(value);
-    var endDate = this._extractEndDate(value);
-    if (startDate && !this._handleDateChange('_selectedStartDate', startDate, oldValue)) {
-      startDate="";
+
+    var startString = this._extractStart(value);
+    var endString = this._extractEnd(value);
+
+    // if (startString && !this._handleDateChange('_selectedStartDate', startString, oldValue)) {
+    //   startString="";
+    //   this._selectedStartDate = null;
+    // } else {
+    //   this._selectedStartDate = this._parseDate(startString);
+    // }
+    // if (endString && !this._handleDateChange('_selectedEndDate', endString, oldValue)) {
+    //   endString="";
+    //   this._selectedEndDate = null;
+    // } else {
+    //   this._selectedEndDate = this._parseDate(endString);
+    // }
+
+    if (startString) {
+      const [startDate, startTime] = startString.split('T');
+      if(!this._handleDateChange('_selectedStartDate', startDate, oldValue)) {
+        startString = "";
+        this._selectedStartDate = null;
+      } else {
+         this._selectedStartDate = this._parseDate(startDate);
+      }
+      this._selectedStartTime = startTime || '';
+    } else {
       this._selectedStartDate = null;
-    } else {
-      this._selectedStartDate = this._parseDate(startDate);
-    }
-    if (endDate && !this._handleDateChange('_selectedEndDate', endDate, oldValue)) {
-      endDate="";
-      this._selectedEndDate = null;
-    } else {
-      this._selectedEndDate = this._parseDate(endDate);
+      this._selectedStartTime = '';
     }
 
-    this.value = startDate + ";" + endDate;
+    if (endString) {
+      const [endDate, endTime] = endString.split('T');
+      if(!this._handleDateChange('_selectedEndDate', endDate, oldValue)) {
+        endString = "";
+        this._selectedEndDate = null;
+      } else {
+        this._selectedEndDate = this._parseDate(endDate);
+      }
+      this._selectedEndTime = endTime || '';
+    } else {
+      this._selectedEndDate = null;   
+      this._selectedEndTime = '';
+    }
+
+    // this.value = startString + ";" + endString;
   }
 
-  _extractStartDate(value) {
+  _extractStart(value) {
     var extracted = value.split(";")[0];
     return (extracted==undefined?"":extracted);
   }
 
-  _extractEndDate(value) {
+  _extractEnd(value) {
     var extracted = value.split(";")[1];
     return (extracted==undefined?"":extracted);
   }
@@ -1186,7 +1259,8 @@ export const DateTimeRangePickerMixin = (subclass) =>
   _clearStartTextField(e) {
     if (e.detail.sourceEvent.__fromClearButton) {
       this._inputStartElement.clear();
-    }
+      this._timeStartElement.clear();
+    }    
   }
 
   /** @private */
@@ -1215,6 +1289,14 @@ export const DateTimeRangePickerMixin = (subclass) =>
     if (this._nativeInput && this._nativeInput.setSelectionRange) {
       this._nativeInput.setSelectionRange(a, b);
     }
+  }
+
+  _isClearButton(event) {
+    const path = event.composedPath();
+    const inputIndex = path.indexOf(this._timeEndElement);
+    return path.slice(0, inputIndex)
+      .filter(el => el.getAttribute && el.getAttribute('part') === 'clear-button')
+      .length === 1;
   }
 
   /**
@@ -1279,7 +1361,6 @@ export const DateTimeRangePickerMixin = (subclass) =>
       case 'up':
         // prevent scrolling the page with arrows
         e.preventDefault();
-
         if (this.opened) {
           this._overlayContent.focus();
           this._overlayContent._onKeydown(e);
@@ -1287,10 +1368,10 @@ export const DateTimeRangePickerMixin = (subclass) =>
           this._focusOverlayOnOpen = true;
           this.open();
         }
-
         break;
       case 'enter': {
-        if (this.shadowRoot.activeElement === this._inputEndElement.inputElement) this._selectingStartDate=false;
+        if (this.shadowRoot.activeElement === this._inputEndElement.inputElement) 
+          this._selectingStartDate = false;
         if (this._selectingStartDate) {
           const parsedStartDate = this._getParsedDate(this._inputStartValue);
           const isValidStartDate = this._isValidDate(parsedStartDate);
@@ -1330,8 +1411,6 @@ export const DateTimeRangePickerMixin = (subclass) =>
             }
           }
         }
-
-
         break;
       }
       case 'esc':
@@ -1355,8 +1434,7 @@ export const DateTimeRangePickerMixin = (subclass) =>
         }
         break;
       case 'tab':
-        if (this.shadowRoot.activeElement === this._inputStartElement.inputElement)
-        {
+        if (this.shadowRoot.activeElement === this._inputStartElement.inputElement){
           if (e.shiftKey) {
             this.close();
             this.blur();
@@ -1367,17 +1445,43 @@ export const DateTimeRangePickerMixin = (subclass) =>
             }
             e.preventDefault();
             this._selectingStartDate=false;
-            this._inputEndElement.focus();
+            // this._inputEndElement.focus();
+            this._timeStartElement.focus();
           }
-        } else if (this.shadowRoot.activeElement === this._inputEndElement.inputElement) {
-          if (e.shiftKey) {
+        } else if(this.shadowRoot.activeElement === this._timeStartElement.inputElement) { 
+          //TODO complete this
+           if (e.shiftKey) {
             const endParsedDate = this._getParsedDate(this._inputEndValue);
             if (this._isValidDate(endParsedDate)) {
               this._selectedEndDate = endParsedDate;
             }
             e.preventDefault();
-            this._selectingStartDate=true;
+            this._selectingStartDate = true;
             this._inputStartElement.focus();
+           } else {
+            e.preventDefault();
+            this._inputEndElement.focus();
+           }        
+        } else if (this.shadowRoot.activeElement === this._inputEndElement.inputElement) {
+          if (e.shiftKey) {
+            // TODO complete this
+            // const endParsedDate = this._getParsedDate(this._inputEndValue);
+            // if (this._isValidDate(endParsedDate)) {
+            //   this._selectedEndDate = endParsedDate;
+            // }
+            e.preventDefault();
+            // this._selectingStartDate = true;
+            // this._inputStartElement.focus();
+            this._timeStartElement.focus();
+          } else {
+            e.preventDefault();
+            this._timeEndElement.focus();
+          }
+        } else if (this.shadowRoot.activeElement === this._timeEndElement.inputElement) {
+          // TODO complete this
+          if (e.shiftKey) {
+            e.preventDefault();
+            this._inputEndElement.focus();
           } else {
             this.close();
           }
@@ -1399,7 +1503,7 @@ export const DateTimeRangePickerMixin = (subclass) =>
     if (!this.opened && this._inputStartElement.value && !this.autoOpenDisabled) {
       this.open();
     }
-    this._userInputStartValueChanged();
+    this._userInputStartDateValueChanged();
 
     if (e.__fromClearButton) {
       this.validateStart();
@@ -1414,7 +1518,7 @@ export const DateTimeRangePickerMixin = (subclass) =>
     if (!this.opened && this._inputEndElement.value && !this.autoOpenDisabled) {
       this.open();
     }
-    this._userInputEndValueChanged();
+    this._userInputEndDateValueChanged();
 
     if (e.__fromClearButton) {
       this.validateEnd();
@@ -1425,7 +1529,7 @@ export const DateTimeRangePickerMixin = (subclass) =>
   }
 
   /** @private */
-  _userInputStartValueChanged(value) {
+  _userInputStartDateValueChanged(value) {
     if (this.opened && this._inputStartValue) {
       const parsedDate = this._getParsedDate(this._inputStartValue);
 
@@ -1440,7 +1544,7 @@ export const DateTimeRangePickerMixin = (subclass) =>
   }
 
   /** @private */
-  _userInputEndValueChanged(value) {
+  _userInputEndDateValueChanged(value) {
     if (this.opened && this._inputEndValue) {
       const parsedDate = this._getParsedDate(this._inputEndValue);
 
