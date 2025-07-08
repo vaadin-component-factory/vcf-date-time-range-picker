@@ -59,21 +59,21 @@
       <h3>Basic usage</h3>
       <demo-snippet>
         <template preserve-content>
-          <vcf-date-time-range-picker id="test" label="Enter date range">
+          <vcf-date-time-range-picker id="test" label="Enter Range" start-date-placeholder="Start date" end-date-placeholder="End date"
+          start-time-placeholder="Start time" end-time-placeholder="End time">
             <vaadin-button id="may2021MonthButton" theme="tertiary" part="preset-button" on-tap="document.querySelector('#test')" slot="presets">
               May 2021
             </vaadin-button>
           </vcf-date-time-range-picker>
-          <vcf-date-time-range-picker placeholder="Enter start date" end-placeholder="Enter end date"></vcf-date-time-range-picker>
-          <vcf-date-time-range-picker value="1990-01-28" end-value="1990-01-30"></vcf-date-time-range-picker>
+          <vcf-date-time-range-picker value="1990-12-28T05:15:40;1990-12-30T06:30"></vcf-date-time-range-picker>
         </template>
       </demo-snippet>
   
       <h3>Disabled and read-only</h3>
       <demo-snippet>
         <template preserve-content>
-          <vcf-date-time-range-picker disabled label="Disabled" value="1990-01-28"></vcf-date-time-range-picker>
-          <vcf-date-time-range-picker readonly label="Read-only" value="1990-01-28"></vcf-date-time-range-picker>
+          <vcf-date-time-range-picker disabled label="Disabled" value="1990-01-28T01:00:00;1990-01-30T01:00:00"></vcf-date-time-range-picker>
+          <vcf-date-time-range-picker readonly label="Read-only" value="1990-01-28T01:00:00"></vcf-date-time-range-picker>
         </template>
       </demo-snippet>
 
@@ -123,16 +123,14 @@
       <h3>Value change event</h3>
       <demo-snippet id="value-change-event" when-defined="vcf-date-time-range-picker">
         <template preserve-content>
-          <vcf-date-time-range-picker label="Label"></vcf-date-time-range-picker>
+          <vcf-date-time-range-picker id="with-value-change" label="Label"></vcf-date-time-range-picker>
           <div>Selected value: <span id="output"></span></div>
           <script>
-            // window.addDemoReadyListener('#value-change-event', function(document) {
-            //   const datePicker = document.querySelector('vcf-date-time-range-picker');
-            //   const output = document.querySelector('#output');
-            //   datePicker.addEventListener('change', function(event) {
-            //     output.textContent = event.target.value;
-            //   });
-            // });
+            const withValueChange = document.querySelector('#with-value-change');
+            const span = document.querySelector('#output');
+            withValueChange.addEventListener('value-changed', function(e) {
+              span.textContent = e.detail.value;
+            });
           </script>
         </template>
       </demo-snippet>

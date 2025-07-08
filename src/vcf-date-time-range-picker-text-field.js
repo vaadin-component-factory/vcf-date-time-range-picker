@@ -27,14 +27,19 @@ registerStyles(
       :host(.endDate) [part="input-field"] {
         border-top-left-radius: 0px;
         border-bottom-left-radius: 0px;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
       }
+
       :host(.startDate) [part="input-field"] {
         border-top-right-radius: 0px;
         border-bottom-right-radius: 0px;
       }
+
       ::slotted(input) {
         --_lumo-text-field-overflow-mask-image: none;
       }
+      
       `,
   { moduleId: 'vcf-date-time-range-picker-text-field-styles' }
 );
@@ -42,20 +47,14 @@ registerStyles(
 /**
  * An element used internally by `<vcf-date-time-range-picker>`. Not intended to be used separately.
  *
- * @extends OverlayElement
+ * @extends TextField
  * @private
  */
 class DateTimeRangePickerTextFieldElement extends TextField {
   static get is() {
     return 'vcf-date-time-range-picker-text-field';
   }
-
-  _onClearButtonClick(event) {
-    event.preventDefault();
-    this.inputElement.focus();
-    this.__clear();
-  }
-
+  
   __clear() {
     this.clear();
     const inputEvent = new Event('input', { bubbles: true, composed: true });

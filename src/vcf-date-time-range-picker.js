@@ -9,6 +9,7 @@ import { DateTimeRangePickerMixin } from './vcf-date-time-range-picker-mixin.js'
 import './vcf-date-time-range-picker-text-field.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import './vcf-date-time-range-picker-time-field.js';
 
 /**
  *
@@ -112,99 +113,150 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
         pointer-events: auto;
       }
 
+      .date-time-group {
+        display: flex;
+        flex: 1;
+        position: relative;
+      }
+
       [part="start-text-field"] {
-        align-self: baseline;
+        align-self: end;
         flex-grow: 1;
-        width: 11ch;
+        width: 12ch;
       }
+
       [part="end-text-field"] {
-        align-self: baseline;
+        align-self: end;
         flex-grow: 1;
-        width: 16ch;
-        overflow: hidden;
+        width: 12ch;
       }
-      [focus-ring][part="end-text-field"] {
+      
+      [part="start-time-picker"] {
+        align-self: end;
+        flex-grow: 1;
+        width: 10ch;
+        padding-bottom: var(--lumo-space-xs);
+      }
+
+      [part="end-time-picker"] {
+        align-self: end;
+        flex-grow: 1;
+        width: 15ch;
+        padding-bottom: var(--lumo-space-xs);
+      }
+
+      /* [focus-ring][part="end-text-field"] {
         padding-left: 2px;
         padding-right: 2px;
       }
-      [focus-ring][part="end-text-field"] [part="toggle-button"] {
+
+      [focus-ring][part="end-time-picker"] [part="toggle-button"] {
         margin-right: -2px;
-      }
+      } */     
+
       [part="dash"][hidden] {
         display: none;
       }
+
       [part="drp-container"] {
         display:flex; 
         min-width:100%; 
         max-width:100%; 
       }
-      [part="end-text-field"] [part="toggle-button"] {
-        position: absolute;
-        right: 6px;
-      }
-      [part="end-text-field"]::part(clear-button) {
-        margin-right: 24px;
-      }
     </style>
 
     <div part="drp-container">
-      <vcf-date-time-range-picker-text-field id="startInput"
-          role="application"
-          autocomplete="off"
-          on-focus="_focusStart"
-          value="{{_userInputStartValue}}"
-          invalid="[[invalid]]"
-          label="[[label]]"
-          name="[[name]]"
-          placeholder="[[placeholder]]"
-          required="[[required]]"
-          disabled="[[disabled]]"
-          readonly="[[readonly]]"
-          error-message="[[errorMessage]]"
-          aria-label$="[[label]]"
-          part="start-text-field"
-          helper-text="[[helperText]]"
-          theme$="[[theme]]"
-          class="startDate"
-          autoselect="true"
-          hidden="[[hideTextFields]]"
-        >
-        <slot name="prefix" slot="prefix"></slot>        
-        <div part="helper-text" slot="helper" name="helper-text">[[helperText]]</div>
-      </vcf-date-time-range-picker-text-field
-      ><vcf-date-time-range-picker-text-field 
+      <div class="date-time-group">
+        <vcf-date-time-range-picker-text-field id="startInput"
+            role="application"
+            autocomplete="off"
+            on-focus="_focusStart"
+            value="{{_userInputStartDateValue}}"
+            invalid="[[invalid]]"
+            label="[[label]]"
+            name="[[name]]"
+            placeholder="[[startDatePlaceholder]]"
+            required="[[required]]"
+            disabled="[[disabled]]"
+            readonly="[[readonly]]"
+            error-message="[[errorMessage]]"
+            aria-label$="[[label]]"
+            part="start-text-field"
+            helper-text="[[helperText]]"
+            theme$="[[theme]]"
+            class="startDate"
+            autoselect="true"
+            hidden="[[hideTextFields]]"
+          >
+          <slot name="prefix" slot="prefix"></slot>        
+          <div part="helper-text" slot="helper" name="helper-text">[[helperText]]</div>
+        </vcf-date-time-range-picker-text-field>
+        <vcf-date-time-range-picker-time-field 
+            id="startTime" 
+            part="start-time-picker" 
+            value="{{_selectedStartTime}}" 
+            disabled="[[disabled]]"
+            readonly="[[readonly]]" 
+            hidden="[[hideTextFields]]" 
+            theme$="[[theme]]" 
+            aria-label="Start time" 
+            class="startTime"
+            placeholder="[[startTimePlaceholder]]"
+          >
+        </vcf-date-time-range-picker-time-field>
+      </div>
+
+      <vcf-date-time-range-picker-text-field 
           disabled="[[disabled]]" 
           class="dash" 
           value="—" 
           invalid="[[invalid]]"
           readonly="[[readonly]]"
           hidden="[[hideTextFields]]" 
-          part="dash"></vcf-date-time-range-picker-text-field
-      ><vcf-date-time-range-picker-text-field id="endInput"
-          role="application"
-          autocomplete="off"
-          on-focus="_focusEnd"
-          on-change="_clearStartTextField"
-          value="{{_userInputEndValue}}"
-          invalid="[[invalid]]"
-          name="[[name]]"
-          placeholder="[[endPlaceholder]]"
-          required="[[required]]"
-          disabled="[[disabled]]"
-          readonly="[[readonly]]"
-          clear-button-visible$="[[clearButtonVisible]]"
-          part="end-text-field"
-          helper-end-text="[[helperEndText]]"
-          theme$="[[theme]]"
-          class="endDate"
-          autoselect="true"
-          hidden="[[hideTextFields]]"
+          part="dash"
         >
-        <slot name="prefix" slot="prefix"></slot>
-        <div part="helper-end-text" slot="helper" name="helper-end-text">[[helperEndText]]</div>
-        <div part="toggle-button" slot="suffix" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]"></div>
       </vcf-date-time-range-picker-text-field>
+
+      <div class="date-time-group">
+        <vcf-date-time-range-picker-text-field id="endInput"
+            role="application"
+            autocomplete="off"
+            on-focus="_focusEnd"            
+            on-change="_clearStartTextField"
+            value="{{_userInputEndDateValue}}"
+            invalid="[[invalid]]"
+            name="[[name]]"
+            placeholder="[[endDatePlaceholder]]"
+            required="[[required]]"
+            disabled="[[disabled]]"
+            readonly="[[readonly]]"            
+            part="end-text-field"
+            helper-end-text="[[helperEndText]]"
+            theme$="[[theme]]"
+            class="endDate"
+            autoselect="true"
+            hidden="[[hideTextFields]]"
+          >
+          <slot name="prefix" slot="prefix"></slot>
+          <div part="helper-end-text" slot="helper" name="helper-end-text">[[helperEndText]]</div>
+          <!-- <div part="toggle-button" slot="suffix" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]"></div> -->
+        </vcf-date-time-range-picker-text-field>
+        <vcf-date-time-range-picker-time-field 
+            id="endTime" 
+            part="end-time-picker" 
+            value="{{_selectedEndTime}}" 
+            disabled="[[disabled]]"
+            readonly="[[readonly]]" 
+            hidden="[[hideTextFields]]" 
+            theme$="[[theme]]" aria-label="End time" 
+            clear-button-visible$="[[clearButtonVisible]]" 
+            class="endTime"
+            placeholder="[[endTimePlaceholder]]"
+          >
+        </vcf-date-time-range-picker-time-field>
+      </div>
     </div>
+
     <vcf-date-time-range-picker-overlay
         id="overlay"
         fullscreen$="[[_fullscreen]]"
@@ -263,13 +315,35 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 
       /**
        * A placeholder string in addition to the label. If this is set, the label will always float.
+       * This is used for the start date input.
+       * @attr {string} start-date-placeholder
+       * @type {string}
        */
-      placeholder: String,
+      startDatePlaceholder: String,
 
       /**
        * A placeholder string in addition to the label. If this is set, the label will always float.
+       * This is used for the end date input.
+       * @attr {string} end-date-placeholder
+       * @type {string}
        */
-        endPlaceholder: String,
+      endDatePlaceholder: String,
+
+      /**
+       * A placeholder string in addition to the label. If this is set, the label will always float.
+       * This is used for the start time input. 
+       * @attr {string} start-time-placeholder
+       * @type {string}
+       */
+      startTimePlaceholder: String,
+
+      /**
+       * A placeholder string in addition to the label. If this is set, the label will always float.
+       * This is used for the end time input.   
+       * @attr {string} end-time-placeholder
+       * @type {string} 
+       */
+      endTimePlaceholder: String,
 
       /**
        * String used for the helper text.
@@ -281,7 +355,7 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
        * String used for the helper end text.
        * @attr {string} helper-text
        */
-        helperEndText: String,
+      helperEndText: String,
 
       /**
        * Set to true to make this element read-only.
@@ -323,15 +397,16 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
       },
 
       /** @private */
-      _userInputStartValue: String,
-      _userInputEndValue: String
-    };
+      _userInputStartDateValue: String,
+      _userInputEndDateValue: String,
+
+      };
   }
 
   static get observers() {
     return [
-      '_userInputStartValueChanged(_userInputStartValue)',
-      '_userInputEndValueChanged(_userInputEndValue)',
+      '_userInputStartDateValueChanged(_userInputStartDateValue)',
+      '_userInputEndDateValueChanged(_userInputEndDateValue)',
       '_setClearButtonLabel(i18n.clear)'
     ];
   }
@@ -405,15 +480,31 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 
     if (this._cancelled) {
       this._cancelled = false;
-	  const startDate = this._parseDate(this._extractStartDate(this.value));
-      const endDate = this._parseDate(this._extractEndDate(this.value));
-      this._selectedStartDate = startDate;
-      this._selectedEndDate = endDate;
+	    // const startDate = this._parseDate(this._extractStartDate(this.value));
+      // const endDate = this._parseDate(this._extractEndDate(this.value));
+      // this._selectedStartDate = startDate;
+      // this._selectedEndDate = endDate;
+
+      // const startString = this._extractStart(value);
+      // const endString = this._extractEnd(value);
+     
+      // const [startDateString, startTimeString] = startString.split('T');
+      // const startDate = this._parseDate(startDateString);
+      // this._selectedStartDate = startDate;
+      // this.startTime = startTimeString || '';
+
+      // const [endDateString, endTimeString] = endString.split('T');
+      // const endDate = this._parseDate(endDateString);
+      // this._selectedEndDate = endDate;
+      // this.endTime = endTimeString || '';
+
+      this._valueChanged(this.value);
+
     } else if (this._selectedStartDate && this._selectedEndDate) {
       if (this._selectedStartDate >= this._selectedEndDate) {
         this._selectedEndDate = null;
       }
-      this.value = this._formatISO(this._selectedStartDate)+";"+this._formatISO(this._selectedEndDate);
+      this.value = this._formatISO(this._selectedStartDate, this._selectedStartTime) + ";" + this._formatISO(this._selectedEndDate, this._selectedEndTime);
     }
   }
 
@@ -427,7 +518,7 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
    * @return {HTMLElement}
    * @protected
    */
-    _inputStart() {
+  _inputStart() {
     return this.$.startInput;
   }
 
@@ -435,7 +526,7 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
    * @return {HTMLElement}
    * @protected
    */
-    _inputEnd() {
+  _inputEnd() {
     return this.$.endInput;
   }
 
@@ -455,6 +546,41 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
   /** @return {string} */
   get _inputEndValue() {
     return this._inputEndElement.value;
+  }
+
+  /* time fields */
+  /**
+   * @return {HTMLElement}
+   * @protected
+   */
+  _timeStart() {
+    return this.$.startTime;
+  }
+
+  /**
+   * @return {HTMLElement}
+   * @protected
+   */
+  _timeEnd() {
+    return this.$.endTime;
+  }
+
+  set _timeStartValue(value) {
+    this._timeStartElement.value = value;
+  }
+
+  /** @return {string} */
+  get _timeStartValue() {
+    return this._timeStartElement.value;
+  }
+
+  set _timeEndValue(value) {
+    this._timeEndElement.value = value;
+  }
+
+  /** @return {string} */
+  get _timeEndValue() {
+    return this._timeEndElement.value;
   }
 
   /** @private */

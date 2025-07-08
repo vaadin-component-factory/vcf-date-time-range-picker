@@ -11,20 +11,18 @@ registerStyles(
 
       [part="dash"] {
         display: inline-flex;
-        align-self: baseline;
+        align-self: end;
         width: 26px;
       }
 
-
-
-      [part="toggle-button"]::before {
+      /* [part="toggle-button"]::before {
         content: var(--lumo-icons-calendar);
-      }
+      } */
 
-      [part="clear-button"]::before {
+      /* [part="clear-button"]::before {
         content: var(--lumo-icons-cross);
-      }
-
+      } */
+     
       @media (max-width: 420px), (max-height: 420px) {
         [part="overlay-content"] {
           height: 70vh;
