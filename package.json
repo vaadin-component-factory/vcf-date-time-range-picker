@@ -48,7 +48,9 @@
     "@polymer/iron-component-page": "^4.0.0",
     "@polymer/iron-demo-helpers": "^3.0.0-pre.19",
     "@polymer/iron-test-helpers": "^3.0.0",
+    "@vaadin/date-picker": "24.8.2",
     "@vaadin/form-layout": "24.8.2",
+    "@vaadin/text-area": "24.8.2",
     "@web/dev-server": "^0.4.6",
     "wct-browser-legacy": "^1.0.1"
   },
