@@ -120,26 +120,26 @@ import './vcf-date-time-range-picker-time-field.js';
       }
 
       [part="start-text-field"] {
-        align-self: end;
+        align-self: baseline;
         flex-grow: 1;
         width: 12ch;
       }
 
       [part="end-text-field"] {
-        align-self: end;
+        align-self: baseline;
         flex-grow: 1;
         width: 12ch;
       }
       
       [part="start-time-picker"] {
-        align-self: end;
+        align-self: baseline;
         flex-grow: 1;
         width: 10ch;
         padding-bottom: var(--lumo-space-xs);
       }
 
       [part="end-time-picker"] {
-        align-self: end;
+        align-self: baseline;
         flex-grow: 1;
         width: 15ch;
         padding-bottom: var(--lumo-space-xs);
@@ -160,6 +160,7 @@ import './vcf-date-time-range-picker-time-field.js';
 
       [part="drp-container"] {
         display:flex; 
+        align-items: baseline;
         min-width:100%; 
         max-width:100%; 
       }
@@ -399,8 +400,7 @@ import './vcf-date-time-range-picker-time-field.js';
       /** @private */
       _userInputStartDateValue: String,
       _userInputEndDateValue: String,
-
-      };
+    };
   }
 
   static get observers() {
@@ -480,31 +480,18 @@ import './vcf-date-time-range-picker-time-field.js';
 
     if (this._cancelled) {
       this._cancelled = false;
-	    // const startDate = this._parseDate(this._extractStartDate(this.value));
-      // const endDate = this._parseDate(this._extractEndDate(this.value));
-      // this._selectedStartDate = startDate;
-      // this._selectedEndDate = endDate;
-
-      // const startString = this._extractStart(value);
-      // const endString = this._extractEnd(value);
-     
-      // const [startDateString, startTimeString] = startString.split('T');
-      // const startDate = this._parseDate(startDateString);
-      // this._selectedStartDate = startDate;
-      // this.startTime = startTimeString || '';
-
-      // const [endDateString, endTimeString] = endString.split('T');
-      // const endDate = this._parseDate(endDateString);
-      // this._selectedEndDate = endDate;
-      // this.endTime = endTimeString || '';
-
-      this._valueChanged(this.value);
-
-    } else if (this._selectedStartDate && this._selectedEndDate) {
-      if (this._selectedStartDate >= this._selectedEndDate) {
-        this._selectedEndDate = null;
-      }
-      this.value = this._formatISO(this._selectedStartDate, this._selectedStartTime) + ";" + this._formatISO(this._selectedEndDate, this._selectedEndTime);
+	    this._valueChanged(this.value);
+    // } else if (this._selectedStartDate && this._selectedEndDate) {
+    //   if (this._selectedStartDate >= this._selectedEndDate) {
+    //     this._selectedEndDate = null;
+    //   }
+    //   this.value = this._formatISO(this._selectedStartDate, this._selectedStartTime) + ";" + this._formatISO(this._selectedEndDate, this._selectedEndTime);
+    // }
+    } else {
+      // This now saves the current state, even if one of the dates is not set.
+      const startValue = this._formatISO(this._selectedStartDate, this._selectedStartTime);
+      const endValue = this._formatISO(this._selectedEndDate, this._selectedEndTime);
+      this.value = `${startValue};${endValue}`;
     }
   }
 

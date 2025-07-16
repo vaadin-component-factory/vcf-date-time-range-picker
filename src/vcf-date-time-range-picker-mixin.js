@@ -246,6 +246,8 @@ export const DateTimeRangePickerMixin = (subclass) =>
             thisYear: 'This Year',
             lastYear: 'Last Year',
             cancel: 'Cancel',
+            start: 'Start',
+            end: 'End',
             formatDate: d => {
               const yearStr = String(d.year).replace(/\d+/, y => '0000'.substr(y.length) + y);
               return [d.month + 1, d.day, yearStr].join('/');
@@ -403,6 +405,8 @@ export const DateTimeRangePickerMixin = (subclass) =>
       '__updateOverlayContent(_overlayContent, i18n, label, _minDate, _maxDate, _focusedDate, showWeekNumbers, _selectedStartDate, _selectedEndDate, _selectingStartDate, hideSidePanel)',
       '__updateOverlayContentTheme(_overlayContent, _theme)',
       '__updateOverlayContentFullScreen(_overlayContent, _fullscreen)',
+      '_updateStartTime(_selectedStartDate)',
+      '_updateEndTime(_selectedEndDate)'
     ];
   }
   
@@ -601,7 +605,7 @@ export const DateTimeRangePickerMixin = (subclass) =>
       if (this._selectedStartDate && this._selectedStartDate<=this._selectedEndDate) {
         this._selectingStartDate = true;
         this._focus();
-        this.close();
+        // this.close();
       } else {
         this._selectingStartDate = false;
         this._selectedStartDate = this._selectedEndDate;
@@ -783,6 +787,36 @@ export const DateTimeRangePickerMixin = (subclass) =>
     }
   }
 
+  _updateStartTime(selectedStartDate) {
+    if (selectedStartDate instanceof Date && !isNaN(selectedStartDate)) {
+      const pad = (num) => String(num).padStart(2, '0');
+      this._selectedStartTime = `${pad(selectedStartDate.getHours())}:${pad(selectedStartDate.getMinutes())}:${pad(selectedStartDate.getSeconds())}`;
+    } else {
+      this._selectedStartTime = '';
+    }
+  }
+
+  _updateEndTime(selectedEndDate) {
+    if (selectedEndDate instanceof Date && !isNaN(selectedEndDate)) {
+      const pad = (num) => String(num).padStart(2, '0');
+      this._selectedEndTime = `${pad(selectedEndDate.getHours())}:${pad(selectedEndDate.getMinutes())}:${pad(selectedEndDate.getSeconds())}`;
+    } else {
+      this._selectedEndTime = '';
+    }
+  }
+
+  /** @private */
+  _getTimeStringFromDate(date) {
+    if (!(date instanceof Date) || isNaN(date)) {
+      return '';
+    }
+    const pad = (num) => String(num).padStart(2, '0');
+    const h = pad(date.getHours());
+    const m = pad(date.getMinutes());
+    const s = pad(date.getSeconds());
+    return `${h}:${m}:${s}`;
+  }
+
   /** @private */
   _selectedStartDateChanged(selectedDate, formatDate) {
     if (selectedDate === undefined || formatDate === undefined) {
@@ -792,6 +826,9 @@ export const DateTimeRangePickerMixin = (subclass) =>
       this.__dispatchChange = true;
     }
     const value = this._formatISO(selectedDate);
+
+    // Update the time property when the date object changes
+    this._selectedStartTime = this._getTimeStringFromDate(selectedDate);
 
     this.__keepInputValue || this._applyStartInputValue(selectedDate);
 
@@ -811,6 +848,9 @@ export const DateTimeRangePickerMixin = (subclass) =>
       this.__dispatchChange = true;
     }
     const value = this._formatISO(selectedDate);
+
+    // Update the time property when the date object changes
+    this._selectedEndTime = this._getTimeStringFromDate(selectedDate);
 
     this.__keepInputValue || this._applyEndInputValue(selectedDate);
 
@@ -873,54 +913,36 @@ export const DateTimeRangePickerMixin = (subclass) =>
   /** @private */
   _valueChanged(value, oldValue) {
     if (this.__dispatchChange) {
-      this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
+      this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
     }
 
-    var startString = this._extractStart(value);
-    var endString = this._extractEnd(value);
+    const startString = this._extractStart(value);
+    const endString = this._extractEnd(value);
 
-    // if (startString && !this._handleDateChange('_selectedStartDate', startString, oldValue)) {
-    //   startString="";
-    //   this._selectedStartDate = null;
-    // } else {
-    //   this._selectedStartDate = this._parseDate(startString);
-    // }
-    // if (endString && !this._handleDateChange('_selectedEndDate', endString, oldValue)) {
-    //   endString="";
-    //   this._selectedEndDate = null;
-    // } else {
-    //   this._selectedEndDate = this._parseDate(endString);
-    // }
-
+    // Use the native Date constructor which correctly parses the full ISO string (date and time).
+    // This creates a Date object with the correct time from the start.
     if (startString) {
-      const [startDate, startTime] = startString.split('T');
-      if(!this._handleDateChange('_selectedStartDate', startDate, oldValue)) {
-        startString = "";
-        this._selectedStartDate = null;
+      const startDate = new Date(startString);
+      // Check if the parsed date is valid before assigning it.
+      if (!isNaN(startDate)) {
+        this._selectedStartDate = startDate;
       } else {
-         this._selectedStartDate = this._parseDate(startDate);
+        this._selectedStartDate = null;
       }
-      this._selectedStartTime = startTime || '';
     } else {
       this._selectedStartDate = null;
-      this._selectedStartTime = '';
     }
 
     if (endString) {
-      const [endDate, endTime] = endString.split('T');
-      if(!this._handleDateChange('_selectedEndDate', endDate, oldValue)) {
-        endString = "";
-        this._selectedEndDate = null;
+      const endDate = new Date(endString);
+      if (!isNaN(endDate)) {
+        this._selectedEndDate = endDate;
       } else {
-        this._selectedEndDate = this._parseDate(endDate);
+        this._selectedEndDate = null;
       }
-      this._selectedEndTime = endTime || '';
     } else {
-      this._selectedEndDate = null;   
-      this._selectedEndTime = '';
+      this._selectedEndDate = null;
     }
-
-    // this.value = startString + ";" + endString;
   }
 
   _extractStart(value) {
@@ -1260,6 +1282,7 @@ export const DateTimeRangePickerMixin = (subclass) =>
     if (e.detail.sourceEvent.__fromClearButton) {
       this._inputStartElement.clear();
       this._timeStartElement.clear();
+      this._timeEndElement.clear();
     }    
   }
 

@@ -29,7 +29,7 @@ registerStyles(
       text-align: left;
     }
 
-    [part="toggle-button"] {
+    :host(.endTime) [part="toggle-button"] {
       position: absolute;
       right: 6px;
     }
@@ -82,7 +82,7 @@ class DateTimeRangePickerTimeFieldElement extends TimePicker {
   }
 
   constructor() {
-    super(); // Always call super() first in a subclass constructor
+    super(); 
 
     // Set the default step to 1 second for every instance of this component
     this.step = 1;

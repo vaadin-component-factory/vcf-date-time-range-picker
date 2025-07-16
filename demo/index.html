@@ -77,7 +77,7 @@
         </template>
       </demo-snippet>
 
-      <h3>Date Range Picker without visible textfields</h3>
+      <h3>Without visible textfields</h3>
       <p>Click the button to open the date range picker</p>
       <demo-snippet id="auto-open-disabled" when-defined="vcf-date-time-range-picker">
         <template preserve-content>
@@ -87,35 +87,35 @@
         </template>
       </demo-snippet>
   
-      <h3>Clear button</h3>
+      <h3>With clear button</h3>
       <demo-snippet>
         <template preserve-content>
-          <vcf-date-time-range-picker clear-button-visible label="Super long super long super long super long super long super long super long super long super  label" value="1990-01-28" error-message="Super long super long super long super long super long super long super long super long super error "></vcf-date-time-range-picker>
+          <vcf-date-time-range-picker clear-button-visible 
+          label="Super long super long super long super long super long super long super long super long super label" 
+          value="1990-01-28T01:00:00;1990-01-29T12:20:20" error-message="Super long super long super long super long super long super long super long super long super error "></vcf-date-time-range-picker>
         </template>
       </demo-snippet>
 
       <h3>Inside Form Layout</h3>
       <demo-snippet>
         <template preserve-content>
-          <vaadin-form-layout id="formLayout">
+          <vaadin-form-layout id="formLayout">           
             <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
             <vaadin-text-field label="Last Name" value="Smith"></vaadin-text-field>
             <vaadin-text-field label="Address" value="A place"></vaadin-text-field>
-            <vcf-date-time-range-picker clear-button-visible label="Super long super long super long super long super long super long super long super long super  label" value="1990-01-28" error-message="Super long super long super long super long super long super long super long super long super error "></vcf-date-time-range-picker>
+            <vcf-date-time-range-picker colspan="2" clear-button-visible label="Super long super long super long super long super long super long super long super long super  label" value="1990-01-28" error-message="Super long super long super long super long super long super long super long super long super error "></vcf-date-time-range-picker>
             <vaadin-text-field label="Email" value="jane.doe@example.com"></vaadin-text-field>
             <vaadin-date-picker label="Birthday" value="1993-06-23"></vaadin-date-picker>
             <vaadin-text-area label="Bio" colspan="2" value="My name is Jane."></vaadin-text-area>
-            <vcf-date-time-range-picker colspan="2" clear-button-visible label="Super long super long super long super long super long super long super long super long super  label" value="1990-01-28" error-message="Super long super long super long super long super long super long super long super long super error "></vcf-date-time-range-picker>
           </vaadin-form-layout>
         </template>
       </demo-snippet>
 
-      <h3>Helper text without side panel</h3>
+      <h3>With helper text and without side panel</h3>
       <p>Use the <code>helper-text</code> attribute or add content to the <code>helper</code> slot to set helper content.</p>
       <demo-snippet id="helper-text">
         <template preserve-content>
-          <vcf-date-time-range-picker hide-side-panel label="Event date">
-            <span slot="helper">International date format</span>
+          <vcf-date-time-range-picker hide-side-panel label="Event date" helper-text="Select the date time range for the event">
           </vcf-date-time-range-picker>
         </template>
       </demo-snippet>

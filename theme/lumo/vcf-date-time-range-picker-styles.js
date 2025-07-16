@@ -11,7 +11,7 @@ registerStyles(
 
       [part="dash"] {
         display: inline-flex;
-        align-self: end;
+        align-self: baseline;
         width: 26px;
       }
 

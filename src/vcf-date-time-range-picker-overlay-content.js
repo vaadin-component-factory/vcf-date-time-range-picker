@@ -13,6 +13,7 @@ import './vcf-date-time-range-month-calendar.js';
 import './vcf-date-time-range-infinite-scroller.js';
 import { dateEquals, getClosestDate, getISOWeekNumber, extractDateParts } from './vcf-date-time-range-picker-helper.js';
 import './vcf-date-time-range-picker-styles.js';
+import '@vaadin/time-picker/src/vaadin-time-picker.js';
 
 /**
  * @extends HTMLElement
@@ -29,6 +30,14 @@ class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(Gesture
         width: 100%;
         outline: none;
         background: #fff;
+      }
+
+      /* Added styles for the main content area */
+      .main-content-wrapper {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        overflow: hidden;
       }
 
       [part="overlay-header"] {
@@ -169,6 +178,36 @@ class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(Gesture
         clip: rect(0, 0, 0, 0);
         clip-path: inset(100%);
       }
+      
+      /* Added styles for the time pickers container */
+      [part="time-pickers"] {
+        display: flex;
+        align-items: center;
+        padding: var(--lumo-space-s, 0.5em);
+        gap: var(--lumo-space-s, 0.5em);
+        border-top: 1px solid var(--lumo-contrast-10pct, #0000001a);
+        min-width: 250px;
+        margin-right: 57px;
+      }
+
+      #startTimeOverlay, #endTimeOverlay {
+         width: 9.5ch;
+      }
+
+      #startTimeOverlayLabel, #endTimeOverlayLabel {
+        color: var(--vaadin-input-field-label-color, var(--lumo-secondary-text-color));
+        font-weight: var(--vaadin-input-field-label-font-weight, 500);
+        font-size: var(--vaadin-input-field-label-font-size, var(--lumo-font-size-s));
+      }
+
+      vaadin-time-picker::part(toggle-button) {
+        display: none;
+      }
+
+      vaadin-time-picker > input {
+        --_lumo-text-field-overflow-mask-image: none;
+      }
+
     </style>
 
     <div id="announcer" role="alert" aria-live="polite">
@@ -214,37 +253,45 @@ class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(Gesture
       </vaadin-button>
     </div>
 
-    <div id="scrollers" desktop$="[[_desktopMode]]" on-track="_track">
-      <vcf-date-time-range-infinite-scroller id="monthScroller" on-custom-scroll="_onMonthScroll" on-touchstart="_onMonthScrollTouchStart" buffer-size="3" active="[[initialPosition]]" part="months">
-        <template>
-          <vcf-date-time-range-month-calendar
-            i18n="[[i18n]]"
-            month="[[_dateAfterXMonths(index)]]"
-            selected-start-date="{{selectedStartDate}}"
-            selected-end-date="{{selectedEndDate}}"
-            selecting-start-date="{{selectingStartDate}}"
-            class-names-for-dates="[[classNamesForDatesString]]"
-            focused-date="[[focusedDate]]"
-            ignore-taps="[[_ignoreTaps]]"
-            show-week-numbers="[[showWeekNumbers]]"
-            min-date="[[minDate]]"
-            max-date="[[maxDate]]"
-            focused$="[[_focused]]"
-            part="month"
-            theme$="[[theme]]">
-          </vcf-date-time-range-month-calendar>
-        </template>
-      </vcf-date-time-range-infinite-scroller>
-      <vcf-date-time-range-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-custom-scroll="_onYearScroll" on-touchstart="_onYearScrollTouchStart" buffer-size="12" active="[[initialPosition]]" part="years">
-        <template>
-          <div part="year-number" role="button" current$="[[_isCurrentYear(index)]]" selected$="[[_isSelectedYear(index, selectedStartDate)]]">
-            [[_yearAfterXYears(index)]]
-          </div>
-          <div part="year-separator" aria-hidden="true"></div>
-        </template>
-      </vcf-date-time-range-infinite-scroller>
-    </div>
+    <div class="main-content-wrapper">
+      <div id="scrollers" desktop$="[[_desktopMode]]" on-track="_track">
+        <vcf-date-time-range-infinite-scroller id="monthScroller" on-custom-scroll="_onMonthScroll" on-touchstart="_onMonthScrollTouchStart" buffer-size="3" active="[[initialPosition]]" part="months">
+          <template>
+            <vcf-date-time-range-month-calendar
+              i18n="[[i18n]]"
+              month="[[_dateAfterXMonths(index)]]"
+              selected-start-date="{{selectedStartDate}}"
+              selected-end-date="{{selectedEndDate}}"
+              selecting-start-date="{{selectingStartDate}}"
+              class-names-for-dates="[[classNamesForDatesString]]"
+              focused-date="[[focusedDate]]"
+              ignore-taps="[[_ignoreTaps]]"
+              show-week-numbers="[[showWeekNumbers]]"
+              min-date="[[minDate]]"
+              max-date="[[maxDate]]"
+              focused$="[[_focused]]"
+              part="month"
+              theme$="[[theme]]">
+            </vcf-date-time-range-month-calendar>
+          </template>
+        </vcf-date-time-range-infinite-scroller>
+        <vcf-date-time-range-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-custom-scroll="_onYearScroll" on-touchstart="_onYearScrollTouchStart" buffer-size="12" active="[[initialPosition]]" part="years">
+          <template>
+            <div part="year-number" role="button" current$="[[_isCurrentYear(index)]]" selected$="[[_isSelectedYear(index, selectedStartDate)]]">
+              [[_yearAfterXYears(index)]]
+            </div>
+            <div part="year-separator" aria-hidden="true"></div>
+          </template>
+        </vcf-date-time-range-infinite-scroller>
+      </div>
 
+      <div part="time-pickers">
+        <label id="startTimeOverlayLabel">[[i18n.start]]</label>
+        <vaadin-time-picker id="startTimeOverlay" value="{{_startTime}}" auto-open-disabled step="1"></vaadin-time-picker>           
+        <label id="endTimeOverlayLabel">[[i18n.end]]</label>
+        <vaadin-time-picker id="endTimeOverlay" value="{{_endTime}}" auto-open-disabled step="1"></vaadin-time-picker>          
+      </div>
+    </div>
 
     <iron-media-query query="(min-width: 375px)" query-matches="{{_desktopMode}}"></iron-media-query>
     `;
@@ -261,7 +308,9 @@ class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(Gesture
        */
       selectedStartDate: {
         type: Date,
-        notify: true
+        notify: true,
+        // Added observer
+        observer: '_selectedStartDateChanged'
       },
 
       /**
@@ -269,7 +318,9 @@ class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(Gesture
        */
       selectedEndDate: {
         type: Date,
-        notify: true
+        notify: true,
+        // Added observer
+        observer: '_selectedEndDateChanged'
       },
 
       /**
@@ -363,7 +414,20 @@ class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(Gesture
       /**
        * Input label
        */
-      label: String
+      label: String,
+
+      // Added properties for time pickers
+      _startTime: {
+        type: String,
+        observer: '_startTimeChanged',
+        value: '00:00:00'
+      },
+
+      _endTime: {
+        type: String,
+        observer: '_endTimeChanged',
+        value: '00:00:00'
+      }
     };
   }
 
@@ -398,6 +462,161 @@ class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(Gesture
     this._toggleAnimateClass(true);
     setTouchAction(this.$.scrollers, 'pan-y');
     IronA11yAnnouncer.requestAvailability();
+  }
+
+  _pad(num) {
+    return String(num).padStart(2, '0');
+  }
+
+  _selectedStartDateChanged(newDate, oldDate) {
+    // if (newDate) {
+    //   const newTime = `${this._pad(newDate.getHours())}:${this._pad(newDate.getMinutes())}:${this._pad(newDate.getSeconds())}`;
+    //   if (this._startTime !== newTime) {
+    //     this._startTime = newTime;
+    //   }
+    // } else {
+    //   // Reset to default when date is cleared
+    //   this._startTime = '00:00:00';
+    // }
+
+    // if (!newDate) {
+    //   this._startTime = '00:00:00'; // Reset time picker if date is cleared
+    //   return;
+    // }
+
+    // // Get the current time from the time-picker
+    // const timeParts = this._startTime.split(':');
+    // const h = parseInt(timeParts[0] || 0);
+    // const m = parseInt(timeParts[1] || 0);
+    // const s = parseInt(timeParts[2] || 0);
+
+    // // If the incoming date's time is different from the
+    // // time-picker's time, update the date object to use the picker's time
+    // if (newDate.getHours() !== h || newDate.getMinutes() !== m || newDate.getSeconds() !== s) {
+    //   newDate.setHours(h, m, s);
+    // }
+
+    // If there's no new date, do nothing.
+    if (!newDate) {
+      return;
+    }
+
+    // The __internalUpdate flag prevents an infinite loop when we call this.set()
+    if (this.__internalUpdate) {
+      return;
+    }
+
+    // If oldDate exists, it means the user clicked a date inside the overlay.
+    // If oldDate is undefined, it means this is the initial setup from the parent component.
+    if (oldDate) {
+      // This is a user click. Preserve the time from the time-picker.
+      const timeParts = this._startTime.split(':');
+      const h = parseInt(timeParts[0] || 0);
+      const m = parseInt(timeParts[1] || 0);
+      const s = parseInt(timeParts[2] || 0);
+
+      const dateWithTime = new Date(newDate);
+      dateWithTime.setHours(h, m, s, 0);
+
+      this.__internalUpdate = true;
+      this.set('selectedStartDate', dateWithTime);
+      this.__internalUpdate = false;
+
+    } else {
+      // This is the initial setup. The incoming newDate has the correct time.
+      // We just need to update our internal time-picker to match it.
+      const pad = (num) => String(num).padStart(2, '0');
+      this._startTime = `${pad(newDate.getHours())}:${pad(newDate.getMinutes())}:${pad(newDate.getSeconds())}`;
+    }
+  }
+
+  _selectedEndDateChanged(newDate, oldDate) {
+    // if (newDate) {
+    //   const newTime = `${this._pad(newDate.getHours())}:${this._pad(newDate.getMinutes())}:${this._pad(newDate.getSeconds())}`;
+    //   if (this._endTime !== newTime) {
+    //     this._endTime = newTime;
+    //   }
+    // } else {
+    //   // Reset to default when date is cleared
+    //   this._endTime = '00:00:00';
+    // }
+
+    // if (!newDate) {
+    //   this._endTime = '00:00:00'; // Reset time picker if date is cleared
+    //   return;
+    // }
+
+    // // Get the current time from the time-picker
+    // const timeParts = this._endTime.split(':');
+    // const h = parseInt(timeParts[0] || 0);
+    // const m = parseInt(timeParts[1] || 0);
+    // const s = parseInt(timeParts[2] || 0);
+
+    // // Apply the picker's time to the date object
+    // if (newDate.getHours() !== h || newDate.getMinutes() !== m || newDate.getSeconds() !== s) {
+    //   newDate.setHours(h, m, s);
+    // }
+    if (!newDate) {
+      return;
+    }
+
+    if (this.__internalUpdate) {
+      return;
+    }
+
+    if (oldDate) {
+      const timeParts = this._endTime.split(':');
+      const h = parseInt(timeParts[0] || 0);
+      const m = parseInt(timeParts[1] || 0);
+      const s = parseInt(timeParts[2] || 0);
+
+      const dateWithTime = new Date(newDate);
+      dateWithTime.setHours(h, m, s, 0);
+      
+      this.__internalUpdate = true;
+      this.set('selectedEndDate', dateWithTime);
+      this.__internalUpdate = false;
+
+    } else {
+      const pad = (num) => String(num).padStart(2, '0');
+      this._endTime = `${pad(newDate.getHours())}:${pad(newDate.getMinutes())}:${pad(newDate.getSeconds())}`;
+    }
+  }
+
+  _startTimeChanged(newTime) {
+    if (this.selectedStartDate && newTime) {
+      const parts = newTime.split(':');
+      if (parts.length >= 2) {
+        const h = parseInt(parts[0], 10);
+        const m = parseInt(parts[1], 10);
+        const s = parts[2] ? parseInt(parts[2], 10) : 0;
+
+        // Check if time is actually different to prevent infinite loops
+        if (this.selectedStartDate.getHours() !== h || this.selectedStartDate.getMinutes() !== m || this.selectedStartDate.getSeconds() !== s) {
+          const newDate = new Date(this.selectedStartDate.getTime());
+          newDate.setHours(h, m, s);
+          this.set('selectedStartDate', newDate);
+        }
+      }
+    }
+  }
+
+  _endTimeChanged(newTime) {
+    if (this.selectedEndDate && newTime) {
+      const parts = newTime.split(':');
+      if (parts.length >= 2) {
+        const h = parseInt(parts[0], 10);
+        const m = parseInt(parts[1], 10);
+        const s = parts[2] ? parseInt(parts[2], 10) : 0;
+        
+        // Check if time is actually different to prevent infinite loops
+        if (this.selectedEndDate.getHours() !== h || this.selectedEndDate.getMinutes() !== m || this.selectedEndDate.getSeconds() !== s) {
+            const newDate = new Date(this.selectedEndDate.getTime());
+            newDate.setHours(h, m, s);
+            this.set('selectedEndDate', newDate);
+        }
+      }
+    }
   }
 
   announceFocusedDate() {
@@ -876,6 +1095,10 @@ class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(Gesture
     const isCancel = e.composedPath().indexOf(this.$.cancelButton) >= 0;
     const isScroller = !isToday && !isCancel;
 
+    const isStartTime = e.composedPath().indexOf(this.$.startTimeOverlay) >= 0;
+    const isEndTime = e.composedPath().indexOf(this.$.endTimeOverlay) >= 0;
+    const isTime = isStartTime || isEndTime;
+
     var eventKey = this._eventKey(e);
     if (eventKey === 'tab') {
       // We handle tabs here and don't want to bubble up.
@@ -901,24 +1124,30 @@ class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(Gesture
         this._focused = false;
       }
     } else if (eventKey) {
-      e.preventDefault();
-      e.stopPropagation();
+      if(!isTime) {
+       e.preventDefault();
+       e.stopPropagation();
+      }     
       switch (eventKey) {
         case 'down':
-          this._moveFocusByDays(7);
-          this.focus();
+          if(!isTime) {
+            this._moveFocusByDays(7);
+            this.focus();
+          }
           break;
         case 'up':
-          this._moveFocusByDays(-7);
-          this.focus();
+          if (!isTime) {
+            this._moveFocusByDays(-7);
+            this.focus();
+          }
           break;
         case 'right':
-          if (isScroller) {
+          if (isScroller && !isTime) {
             this._moveFocusByDays(this.__isRTL ? -1 : 1);
           }
           break;
         case 'left':
-          if (isScroller) {
+          if (isScroller && !isTime) {
             this._moveFocusByDays(this.__isRTL ? 1 : -1);
           }
           break;
