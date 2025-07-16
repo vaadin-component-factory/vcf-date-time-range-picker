@@ -474,17 +474,6 @@ export const DateTimeRangePickerMixin = (subclass) =>
 
     overlay.renderer = this._boundOverlayRenderer;
 
-    // new stuff from v24
-
-    // const isClearButton = e => {
-    //   const path = e.composedPath();
-    //   // FIX: Just using inputStartElement, but don't know what to do
-    //   const inputIndex = path.indexOf(this._timeEndElement);
-    //   return path.slice(0, inputIndex)
-    //     .filter(el => el.getAttribute && el.getAttribute('part') === 'clear-button')
-    //     .length === 1;
-    // };
-
     addListener(this, 'tap', e => {
       // FIXME(platosha): use preventDefault in the text field clear button,
       // then the following composedPath check could be simplified down
@@ -1281,9 +1270,13 @@ export const DateTimeRangePickerMixin = (subclass) =>
   _clearStartTextField(e) {
     if (e.detail.sourceEvent.__fromClearButton) {
       this._inputStartElement.clear();
+      this._clearTimeFields();
+    }    
+  }
+
+  _clearTimeFields() {
       this._timeStartElement.clear();
       this._timeEndElement.clear();
-    }    
   }
 
   /** @private */

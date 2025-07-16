@@ -471,6 +471,7 @@ class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(Gesture
   _selectedStartDateChanged(newDate, oldDate) {
     // If there's no new date, do nothing.
     if (!newDate) {
+       this._startTime = '00:00:00';
       return;
     }
 
@@ -505,6 +506,7 @@ class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(Gesture
 
   _selectedEndDateChanged(newDate, oldDate) {
     if (!newDate) {
+      this._endTime = '00:00:00';
       return;
     }
 
@@ -1259,6 +1261,7 @@ class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(Gesture
   _stopPropagation(e) {
     e.stopPropagation();
   }
+
 }
 
 customElements.define(DateTimePickerOverlayContentElement.is, DateTimePickerOverlayContentElement);
