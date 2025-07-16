@@ -400,6 +400,13 @@ import './vcf-date-time-range-picker-time-field.js';
       /** @private */
       _userInputStartDateValue: String,
       _userInputEndDateValue: String,
+      
+      /** @private */
+      /** Flag to prevent adding the same event listener to the button multiple times */
+      _toggleListenerAdded: {
+        type: Boolean,
+        value: false
+      }
     };
   }
 
@@ -407,7 +414,8 @@ import './vcf-date-time-range-picker-time-field.js';
     return [
       '_userInputStartDateValueChanged(_userInputStartDateValue)',
       '_userInputEndDateValueChanged(_userInputEndDateValue)',
-      '_setClearButtonLabel(i18n.clear)'
+      '_setClearButtonLabel(i18n.clear)',
+      '_updateToggleButtonState(opened, i18n.calendar)'
     ];
   }
 
@@ -481,12 +489,6 @@ import './vcf-date-time-range-picker-time-field.js';
     if (this._cancelled) {
       this._cancelled = false;
 	    this._valueChanged(this.value);
-    // } else if (this._selectedStartDate && this._selectedEndDate) {
-    //   if (this._selectedStartDate >= this._selectedEndDate) {
-    //     this._selectedEndDate = null;
-    //   }
-    //   this.value = this._formatISO(this._selectedStartDate, this._selectedStartTime) + ";" + this._formatISO(this._selectedEndDate, this._selectedEndTime);
-    // }
     } else {
       // This now saves the current state, even if one of the dates is not set.
       const startValue = this._formatISO(this._selectedStartDate, this._selectedStartTime);
@@ -570,11 +572,6 @@ import './vcf-date-time-range-picker-time-field.js';
     return this._timeEndElement.value;
   }
 
-  /** @private */
-  _getAriaExpanded(opened) {
-    return Boolean(opened).toString();
-  }
-
   /**
    * Focusable element used by vaadin-control-state-mixin
    * @return {!HTMLElement}
@@ -590,6 +587,31 @@ import './vcf-date-time-range-picker-time-field.js';
     // https://github.com/vaadin/vaadin-text-field/issues/348
     this._inputStartElement.shadowRoot.querySelector('[part="clear-button"]')
       .setAttribute('aria-label', i18nClear);
+  }
+
+  _updateToggleButtonState(opened, calendarLabel) {
+    // Wait until the #endTime field and its shadow DOM are ready
+    afterNextRender(this, () => {
+      const endTimeField = this.$.endTime;
+      if (!endTimeField) {
+        return;
+      }
+
+      // Get the toggle button from the end time field's shadow DOM
+      const toggleButton = endTimeField.shadowRoot.querySelector('[part="toggle-button"]');
+      if (toggleButton) {
+        // Set accessibility attributes every time the opened state changes
+        toggleButton.setAttribute('aria-expanded', !!opened);
+        toggleButton.setAttribute('aria-label', calendarLabel);
+
+        // Add the click listener only once to prevent duplicates
+        if (!this._toggleListenerAdded) {
+          // When the button is clicked, call the parent's _toggle method
+          toggleButton.addEventListener('click', (e) => this._toggle(e));
+          this._toggleListenerAdded = true;
+        }
+      }
+    });
   }
 }
 

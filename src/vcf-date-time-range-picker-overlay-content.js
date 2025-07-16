@@ -469,33 +469,6 @@ class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(Gesture
   }
 
   _selectedStartDateChanged(newDate, oldDate) {
-    // if (newDate) {
-    //   const newTime = `${this._pad(newDate.getHours())}:${this._pad(newDate.getMinutes())}:${this._pad(newDate.getSeconds())}`;
-    //   if (this._startTime !== newTime) {
-    //     this._startTime = newTime;
-    //   }
-    // } else {
-    //   // Reset to default when date is cleared
-    //   this._startTime = '00:00:00';
-    // }
-
-    // if (!newDate) {
-    //   this._startTime = '00:00:00'; // Reset time picker if date is cleared
-    //   return;
-    // }
-
-    // // Get the current time from the time-picker
-    // const timeParts = this._startTime.split(':');
-    // const h = parseInt(timeParts[0] || 0);
-    // const m = parseInt(timeParts[1] || 0);
-    // const s = parseInt(timeParts[2] || 0);
-
-    // // If the incoming date's time is different from the
-    // // time-picker's time, update the date object to use the picker's time
-    // if (newDate.getHours() !== h || newDate.getMinutes() !== m || newDate.getSeconds() !== s) {
-    //   newDate.setHours(h, m, s);
-    // }
-
     // If there's no new date, do nothing.
     if (!newDate) {
       return;
@@ -531,31 +504,6 @@ class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(Gesture
   }
 
   _selectedEndDateChanged(newDate, oldDate) {
-    // if (newDate) {
-    //   const newTime = `${this._pad(newDate.getHours())}:${this._pad(newDate.getMinutes())}:${this._pad(newDate.getSeconds())}`;
-    //   if (this._endTime !== newTime) {
-    //     this._endTime = newTime;
-    //   }
-    // } else {
-    //   // Reset to default when date is cleared
-    //   this._endTime = '00:00:00';
-    // }
-
-    // if (!newDate) {
-    //   this._endTime = '00:00:00'; // Reset time picker if date is cleared
-    //   return;
-    // }
-
-    // // Get the current time from the time-picker
-    // const timeParts = this._endTime.split(':');
-    // const h = parseInt(timeParts[0] || 0);
-    // const m = parseInt(timeParts[1] || 0);
-    // const s = parseInt(timeParts[2] || 0);
-
-    // // Apply the picker's time to the date object
-    // if (newDate.getHours() !== h || newDate.getMinutes() !== m || newDate.getSeconds() !== s) {
-    //   newDate.setHours(h, m, s);
-    // }
     if (!newDate) {
       return;
     }
