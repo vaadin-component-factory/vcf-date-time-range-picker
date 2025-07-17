@@ -402,17 +402,15 @@ export const DateTimeRangePickerMixin = (subclass) =>
       '_selectedEndDateChanged(_selectedEndDate, i18n.formatDate)',
       '_focusedDateChanged(_focusedDate, i18n.formatDate)',
       '_announceFocusedDate(_focusedDate, opened, _ignoreAnnounce)',
-      '__updateOverlayContent(_overlayContent, i18n, label, _minDate, _maxDate, _focusedDate, showWeekNumbers, _selectedStartDate, _selectedEndDate, _selectingStartDate, hideSidePanel)',
+      '__updateOverlayContent(_overlayContent, i18n, label, _minDate, _maxDate, _focusedDate, showWeekNumbers, _selectedStartDate, _selectedEndDate, _selectingStartDate, hideSidePanel, _selectedStartTime, _selectedEndTime)',
       '__updateOverlayContentTheme(_overlayContent, _theme)',
-      '__updateOverlayContentFullScreen(_overlayContent, _fullscreen)',
-      '_updateStartTime(_selectedStartDate)',
-      '_updateEndTime(_selectedEndDate)'
+      '__updateOverlayContentFullScreen(_overlayContent, _fullscreen)'
     ];
   }
   
   /** @private */
   // eslint-disable-next-line max-params
-  __updateOverlayContent(overlayContent, i18n, label, minDate, maxDate, focusedDate, showWeekNumbers, _selectedStartDate, _selectedEndDate, selectingStartDate, hideSidePanel) {
+  __updateOverlayContent(overlayContent, i18n, label, minDate, maxDate, focusedDate, showWeekNumbers, _selectedStartDate, _selectedEndDate, selectingStartDate, hideSidePanel, _selectedStartTime, _selectedEndTime) {
     if (overlayContent) {
       overlayContent.i18n = i18n;
       overlayContent.label = label;
@@ -424,6 +422,8 @@ export const DateTimeRangePickerMixin = (subclass) =>
       overlayContent.selectedEndDate = _selectedEndDate;
       overlayContent.selectingStartDate = selectingStartDate;
       overlayContent.hideSidePanel = hideSidePanel;
+      overlayContent.selectedStartTime = _selectedStartTime;
+      overlayContent.selectedEndTime = _selectedEndTime;
     }
   }
 
@@ -492,8 +492,6 @@ export const DateTimeRangePickerMixin = (subclass) =>
     this.addEventListener('keydown', this._onKeydown.bind(this));
     this._inputStartElement.addEventListener('input', this._onUserInputStart.bind(this));
     this._inputEndElement.addEventListener('input', this._onUserInputEnd.bind(this));
-
-    // TODO add same as above for time??
 
     this.addEventListener('focus', e => this._noInput && e.target.blur());
     this.addEventListener('blur', e => {
@@ -594,7 +592,6 @@ export const DateTimeRangePickerMixin = (subclass) =>
       if (this._selectedStartDate && this._selectedStartDate<=this._selectedEndDate) {
         this._selectingStartDate = true;
         this._focus();
-        // this.close();
       } else {
         this._selectingStartDate = false;
         this._selectedStartDate = this._selectedEndDate;
@@ -668,6 +665,17 @@ export const DateTimeRangePickerMixin = (subclass) =>
     content.addEventListener('focused-date-changed', (e) => {
       this._focusedDate = e.detail.value;
     });
+
+    // Two-way data binding for `selectedStartTime` property  
+    content.addEventListener('selected-start-time-changed', (e) => {
+      this._selectedStartTime = e.detail.value;
+    });
+
+    // Two-way data binding for `selectedEndTime` property
+    content.addEventListener('selected-end-time-changed', (e) => {
+      this._selectedEndTime = e.detail.value;
+    });
+    
   }
 
   /**
@@ -775,25 +783,7 @@ export const DateTimeRangePickerMixin = (subclass) =>
       this.inputElement.setAttribute('aria-expanded', opened);
     }
   }
-
-  _updateStartTime(selectedStartDate) {
-    if (selectedStartDate instanceof Date && !isNaN(selectedStartDate)) {
-      const pad = (num) => String(num).padStart(2, '0');
-      this._selectedStartTime = `${pad(selectedStartDate.getHours())}:${pad(selectedStartDate.getMinutes())}:${pad(selectedStartDate.getSeconds())}`;
-    } else {
-      this._selectedStartTime = '';
-    }
-  }
-
-  _updateEndTime(selectedEndDate) {
-    if (selectedEndDate instanceof Date && !isNaN(selectedEndDate)) {
-      const pad = (num) => String(num).padStart(2, '0');
-      this._selectedEndTime = `${pad(selectedEndDate.getHours())}:${pad(selectedEndDate.getMinutes())}:${pad(selectedEndDate.getSeconds())}`;
-    } else {
-      this._selectedEndTime = '';
-    }
-  }
-
+  
   /** @private */
   _getTimeStringFromDate(date) {
     if (!(date instanceof Date) || isNaN(date)) {
@@ -908,11 +898,11 @@ export const DateTimeRangePickerMixin = (subclass) =>
     const startString = this._extractStart(value);
     const endString = this._extractEnd(value);
 
-    // Use the native Date constructor which correctly parses the full ISO string (date and time).
-    // This creates a Date object with the correct time from the start.
+    // Use the native Date constructor which correctly parses the full ISO string (date and time)
+    // This creates a Date object with the correct time from the start
     if (startString) {
       const startDate = new Date(startString);
-      // Check if the parsed date is valid before assigning it.
+      // Check if the parsed date is valid before assigning it
       if (!isNaN(startDate)) {
         this._selectedStartDate = startDate;
       } else {
@@ -1094,6 +1084,8 @@ export const DateTimeRangePickerMixin = (subclass) =>
       const parsedDate = this._getParsedDate(inputValue);
 
       if (this._isValidDate(parsedDate)) {
+        const timeParts = (this._selectedStartTime || '00:00:00').split(':');
+        parsedDate.setHours(parseInt(timeParts[0] || 0), parseInt(timeParts[1] || 0), parseInt(timeParts[2] || 0), 0);
         if (this._selectedStartDate<parsedDate || this._selectedStartDate>parsedDate) {
             this._selectedStartDate = parsedDate;
         }
@@ -1111,6 +1103,8 @@ export const DateTimeRangePickerMixin = (subclass) =>
       const parsedDate = this._getParsedDate(inputValue);
 
       if (this._isValidDate(parsedDate)) {
+        const timeParts = (this._selectedEndTime || '00:00:00').split(':');
+        parsedDate.setHours(parseInt(timeParts[0] || 0), parseInt(timeParts[1] || 0), parseInt(timeParts[2] || 0), 0);
         this._selectedEndDate = parsedDate;
       } else {
         this.__keepInputValue = true;
