@@ -145,15 +145,6 @@ import './vcf-date-time-range-picker-time-field.js';
         padding-bottom: var(--lumo-space-xs);
       }
 
-      /* [focus-ring][part="end-text-field"] {
-        padding-left: 2px;
-        padding-right: 2px;
-      }
-
-      [focus-ring][part="end-time-picker"] [part="toggle-button"] {
-        margin-right: -2px;
-      } */     
-
       [part="dash"][hidden] {
         display: none;
       }
@@ -240,7 +231,6 @@ import './vcf-date-time-range-picker-time-field.js';
           >
           <slot name="prefix" slot="prefix"></slot>
           <div part="helper-end-text" slot="helper" name="helper-end-text">[[helperEndText]]</div>
-          <!-- <div part="toggle-button" slot="suffix" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]"></div> -->
         </vcf-date-time-range-picker-text-field>
         <vcf-date-time-range-picker-time-field 
             id="endTime" 
