@@ -287,9 +287,9 @@ class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(Gesture
 
       <div part="time-pickers">
         <label id="startTimeOverlayLabel">[[i18n.start]]</label>
-        <vaadin-time-picker id="startTimeOverlay" value="{{_startTime}}" auto-open-disabled step="1"></vaadin-time-picker>           
+        <vaadin-time-picker id="startTimeOverlay" value="{{selectedStartTime}}" auto-open-disabled step="1"></vaadin-time-picker>           
         <label id="endTimeOverlayLabel">[[i18n.end]]</label>
-        <vaadin-time-picker id="endTimeOverlay" value="{{_endTime}}" auto-open-disabled step="1"></vaadin-time-picker>          
+        <vaadin-time-picker id="endTimeOverlay" value="{{selectedEndTime}}" auto-open-disabled step="1"></vaadin-time-picker>          
       </div>
     </div>
 
@@ -308,9 +308,7 @@ class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(Gesture
        */
       selectedStartDate: {
         type: Date,
-        notify: true,
-        // Added observer
-        observer: '_selectedStartDateChanged'
+        notify: true
       },
 
       /**
@@ -318,9 +316,7 @@ class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(Gesture
        */
       selectedEndDate: {
         type: Date,
-        notify: true,
-        // Added observer
-        observer: '_selectedEndDateChanged'
+        notify: true
       },
 
       /**
@@ -417,13 +413,13 @@ class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(Gesture
       label: String,
 
       // Added properties for time pickers
-      _startTime: {
+      selectedStartTime: {
         type: String,
         observer: '_startTimeChanged',
         value: '00:00:00'
       },
 
-      _endTime: {
+      selectedEndTime: {
         type: String,
         observer: '_endTimeChanged',
         value: '00:00:00'
@@ -463,76 +459,7 @@ class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(Gesture
     setTouchAction(this.$.scrollers, 'pan-y');
     IronA11yAnnouncer.requestAvailability();
   }
-
-  _pad(num) {
-    return String(num).padStart(2, '0');
-  }
-
-  _selectedStartDateChanged(newDate, oldDate) {
-    // If there's no new date, do nothing.
-    if (!newDate) {
-       this._startTime = '00:00:00';
-      return;
-    }
-
-    // The __internalUpdate flag prevents an infinite loop when we call this.set()
-    if (this.__internalUpdate) {
-      return;
-    }
-
-    // If oldDate exists, it means the user clicked a date inside the overlay.
-    // If oldDate is undefined, it means this is the initial setup from the parent component.
-    if (oldDate) {
-      // This is a user click. Preserve the time from the time-picker.
-      const timeParts = this._startTime.split(':');
-      const h = parseInt(timeParts[0] || 0);
-      const m = parseInt(timeParts[1] || 0);
-      const s = parseInt(timeParts[2] || 0);
-
-      const dateWithTime = new Date(newDate);
-      dateWithTime.setHours(h, m, s, 0);
-
-      this.__internalUpdate = true;
-      this.set('selectedStartDate', dateWithTime);
-      this.__internalUpdate = false;
-
-    } else {
-      // This is the initial setup. The incoming newDate has the correct time.
-      // We just need to update our internal time-picker to match it.
-      const pad = (num) => String(num).padStart(2, '0');
-      this._startTime = `${pad(newDate.getHours())}:${pad(newDate.getMinutes())}:${pad(newDate.getSeconds())}`;
-    }
-  }
-
-  _selectedEndDateChanged(newDate, oldDate) {
-    if (!newDate) {
-      this._endTime = '00:00:00';
-      return;
-    }
-
-    if (this.__internalUpdate) {
-      return;
-    }
-
-    if (oldDate) {
-      const timeParts = this._endTime.split(':');
-      const h = parseInt(timeParts[0] || 0);
-      const m = parseInt(timeParts[1] || 0);
-      const s = parseInt(timeParts[2] || 0);
-
-      const dateWithTime = new Date(newDate);
-      dateWithTime.setHours(h, m, s, 0);
-      
-      this.__internalUpdate = true;
-      this.set('selectedEndDate', dateWithTime);
-      this.__internalUpdate = false;
-
-    } else {
-      const pad = (num) => String(num).padStart(2, '0');
-      this._endTime = `${pad(newDate.getHours())}:${pad(newDate.getMinutes())}:${pad(newDate.getSeconds())}`;
-    }
-  }
-
+ 
   _startTimeChanged(newTime) {
     if (this.selectedStartDate && newTime) {
       const parts = newTime.split(':');
