@@ -986,7 +986,7 @@ class DateTimePickerOverlayContentElement extends ThemableMixin(DirMixin(Gesture
 
       if (isFullscreen) {
         e.preventDefault();
-      } else if (isShift && isScroller || !isShift && isCancel) {
+      } else if (isShift && isScroller || !isShift && isCancel || isEndTime) {
         // Return focus back to the input field
         e.preventDefault();
         this.dispatchEvent(new CustomEvent('focus-input', {bubbles: true, composed: true}));

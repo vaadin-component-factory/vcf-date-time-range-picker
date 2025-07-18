@@ -365,7 +365,7 @@ export const DateTimeRangePickerMixin = (subclass) =>
       },
 
       /** @private */
-      _focusOverlayOnOpen: Boolean,
+      _focusOverlayOnOpen: String,
 
       /** @private */
       _overlayContent: {
@@ -739,7 +739,7 @@ export const DateTimeRangePickerMixin = (subclass) =>
 
   /** @private */
   _isNoInput(fullscreen, ios, i18n) {
-    return !this._inputStartElement || !this._inputEndElement || fullscreen || ios || !i18n.parseDate;
+    return !this._inputStartElement || !this._inputEndElement || !this._timeStartElement || !this._timeEndElement || fullscreen || ios || !i18n.parseDate;
   }
 
   /** @private */
@@ -1036,8 +1036,14 @@ export const DateTimeRangePickerMixin = (subclass) =>
     }
 
     if (this._focusOverlayOnOpen) {
-      this._overlayContent.focus();
-      this._focusOverlayOnOpen = false;
+      if (this._focusOverlayOnOpen === 'startTime') {
+        this._overlayContent.$.startTimeOverlay.focus();
+      } else if (this._focusOverlayOnOpen === 'endTime') {
+        this._overlayContent.$.endTimeOverlay.focus();
+      } else {
+        this._overlayContent.focus();
+      }
+      this._focusOverlayOnOpen = null; // Reset for next time
     } else {
       this._focus();
     }
@@ -1276,7 +1282,7 @@ export const DateTimeRangePickerMixin = (subclass) =>
   /** @private */
   _focusAndSelect() {
     this._focus();
-    this._setSelectionRange(0, this._inputValue.length);
+    this._setSelectionRange(0, this._inputStartValue.length);
   }
 
   /** @private */
@@ -1371,14 +1377,36 @@ export const DateTimeRangePickerMixin = (subclass) =>
       case 'up':
         // prevent scrolling the page with arrows
         e.preventDefault();
+        e.stopPropagation();
+        const path = e.composedPath();
+        const fromStartTime = path.find(el => el.id === 'startTime');
+        const fromEndTime = path.find(el => el.id === 'endTime');
+
+        const focusInOverlay = () => {
+          if (fromStartTime) {
+            this._overlayContent.$.startTimeOverlay.focus();
+          } else if (fromEndTime) {
+            this._overlayContent.$.endTimeOverlay.focus();
+          } else {
+            this._overlayContent.focus();
+            this._overlayContent._onKeydown(e);
+          }
+        };
+
         if (this.opened) {
-          this._overlayContent.focus();
-          this._overlayContent._onKeydown(e);
+          focusInOverlay();
         } else {
-          this._focusOverlayOnOpen = true;
+          if (fromStartTime) {
+            this._focusOverlayOnOpen = 'startTime';
+          } else if (fromEndTime) {
+            this._focusOverlayOnOpen = 'endTime';
+          } else {
+            this._focusOverlayOnOpen = 'default';
+          }
           this.open();
         }
         break;
+      
       case 'enter': {
         if (this.shadowRoot.activeElement === this._inputEndElement.inputElement) 
           this._selectingStartDate = false;
@@ -1444,53 +1472,52 @@ export const DateTimeRangePickerMixin = (subclass) =>
         }
         break;
       case 'tab':
-        if (this.shadowRoot.activeElement === this._inputStartElement.inputElement){
-          if (e.shiftKey) {
+        if (this.shadowRoot.activeElement === this._inputStartElement.inputElement){ // if date start -> go to time start
+          if (e.shiftKey) { // if shift key -> close
             this.close();
             this.blur();
-          } else {
+          } else { // go to time start
             const startParsedDate = this._getParsedDate(this._inputStartValue);
             if (this._isValidDate(startParsedDate)) {
+              const timeParts = (this._selectedStartTime || '00:00:00').split(':');
+              startParsedDate.setHours(parseInt(timeParts[0] || 0), parseInt(timeParts[1] || 0), parseInt(timeParts[2] || 0), 0);
               this._selectedStartDate = startParsedDate;
             }
             e.preventDefault();
             this._selectingStartDate=false;
-            // this._inputEndElement.focus();
             this._timeStartElement.focus();
           }
-        } else if(this.shadowRoot.activeElement === this._timeStartElement.inputElement) { 
-          //TODO complete this
-           if (e.shiftKey) {
+        } else if(this.shadowRoot.activeElement === this._timeStartElement.inputElement) { // if time start -> go to date end
+           e.preventDefault();
+           if (e.shiftKey) { // if shift key -> go to date start           
+            this._selectingStartDate = true;
+            this._inputStartElement.focus();
+           } else { // go to input end           
             const endParsedDate = this._getParsedDate(this._inputEndValue);
             if (this._isValidDate(endParsedDate)) {
               this._selectedEndDate = endParsedDate;
-            }
-            e.preventDefault();
-            this._selectingStartDate = true;
-            this._inputStartElement.focus();
-           } else {
-            e.preventDefault();
+            }            
+            this._selectingStartDate = false;
             this._inputEndElement.focus();
            }        
-        } else if (this.shadowRoot.activeElement === this._inputEndElement.inputElement) {
-          if (e.shiftKey) {
-            // TODO complete this
-            // const endParsedDate = this._getParsedDate(this._inputEndValue);
-            // if (this._isValidDate(endParsedDate)) {
-            //   this._selectedEndDate = endParsedDate;
-            // }
-            e.preventDefault();
-            // this._selectingStartDate = true;
-            // this._inputStartElement.focus();
-            this._timeStartElement.focus();
-          } else {
-            e.preventDefault();
+        } else if (this.shadowRoot.activeElement === this._inputEndElement.inputElement) { // if date end -> go to time end
+          e.preventDefault();
+          this._selectingStartDate = false;
+          if (e.shiftKey) { // if shift key -> go to time start
+            this._timeStartElement.focus();            
+          } else { // go to time end       
+            const endParsedDate = this._getParsedDate(this._inputEndValue);
+            if (this._isValidDate(endParsedDate)) {
+              const timeParts = (this._selectedEndTime || '00:00:00').split(':');
+              endParsedDate.setHours(parseInt(timeParts[0] || 0), parseInt(timeParts[1] || 0), parseInt(timeParts[2] || 0), 0);
+              this._selectedEndDate = endParsedDate;
+            }
             this._timeEndElement.focus();
           }
-        } else if (this.shadowRoot.activeElement === this._timeEndElement.inputElement) {
-          // TODO complete this
-          if (e.shiftKey) {
+        } else if (this.shadowRoot.activeElement === this._timeEndElement.inputElement) { // if time end -> close
+          if (e.shiftKey) { // if shift key -> go to date end
             e.preventDefault();
+            this._selectingStartDate = false;
             this._inputEndElement.focus();
           } else {
             this.close();
