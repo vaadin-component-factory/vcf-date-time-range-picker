@@ -778,8 +778,8 @@ export const DateTimeRangePickerMixin = (subclass) =>
   _openedChanged(opened) {
     this._selectingStartDate = true;
 
-    if (this.inputElement) {
-      this.inputElement.setAttribute('aria-expanded', opened);
+    if (this._inputStartElement) {
+      this._inputStartElement.setAttribute('aria-expanded', opened);
     }
   }
   
