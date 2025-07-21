@@ -397,7 +397,6 @@ export const DateTimeRangePickerMixin = (subclass) =>
 
   static get observers() {
     return [
-      '_updateHasValue(value)',
       '_selectedStartDateChanged(_selectedStartDate, i18n.formatDate)',
       '_selectedEndDateChanged(_selectedEndDate, i18n.formatDate)',
       '_focusedDateChanged(_focusedDate, i18n.formatDate)',
@@ -856,12 +855,13 @@ export const DateTimeRangePickerMixin = (subclass) =>
   }
 
   /** @private */
-  _updateHasValue(value) {
-    if (value) {
-      this.setAttribute('has-value', '');
-    } else {
-      this.removeAttribute('has-value');
-    }
+  get _hasValue() {
+    return this.value != null && this.value !== '';
+  }
+
+  /** @private */
+  _updateHasValue(hasValue) {
+    this.toggleAttribute('has-value', hasValue);
   }
 
   /** @private */
@@ -922,6 +922,8 @@ export const DateTimeRangePickerMixin = (subclass) =>
     } else {
       this._selectedEndDate = null;
     }
+
+    this._updateHasValue(this._hasValue);
   }
 
   _extractStart(value) {
