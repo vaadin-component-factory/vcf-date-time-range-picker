@@ -516,6 +516,8 @@ export const DateTimeRangePickerMixin = (subclass) =>
         }
       }
     });
+
+    window.addEventListener('resize', this._boundUpdateAlignmentAndPosition);
   }
 
   /** @private */
@@ -557,6 +559,8 @@ export const DateTimeRangePickerMixin = (subclass) =>
     }
 
     this.opened = false;
+
+    window.removeEventListener('resize', this._boundUpdateAlignmentAndPosition);
   }
 
   /**
@@ -966,8 +970,11 @@ export const DateTimeRangePickerMixin = (subclass) =>
         // FIX: Just used _inputStartElement don't know what to do
         const inputRect = this._inputStartElement.getBoundingClientRect();
 
+        console.log("HERE " + inputRect, this.clientWidth, window.innerWidth);
+
         const bottomAlign = inputRect.top > window.innerHeight / 2;
-        const rightAlign = inputRect.left + this.clientWidth / 2 > window.innerWidth / 2;
+        // const rightAlign = inputRect.left + this.clientWidth / 2 > window.innerWidth / 2;
+        const rightAlign = inputRect.left > window.innerWidth / 2;
 
         if (rightAlign) {
           const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
