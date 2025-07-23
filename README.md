@@ -1,27 +1,30 @@
 [![npm version](https://badgen.net/npm/v/@vaadin-component-factory/vcf-date-time-range-picker)](https://www.npmjs.com/package/@vaadin-component-factory/vcf-date-time-range-picker)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadin-component-factoryvcf-date-time-range-picker)
-[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/vaadin-component-factoryvcf-date-time-range-picker.svg)](https://vaadin.com/directory/component/vaadin-component-factoryvcf-date-time-range-picker)
 
 # &lt;vcf-date-time-range-picker&gt;
 
-[&lt;vcf-date-time-range-picker&gt;](https://vaadin.com/components/vcf-date-time-range-picker) is a Web Component providing a date range selection field which includes a scrollable month calendar view.
+Web Component providing a date-time range selection field which includes a scrollable month calendar view and start and end time pickers.
+
+Implementation is based on [&lt;vcf-date-range-picker&gt;](https://github.com/vaadin-component-factory/vcf-date-range-picker).
+
+This component is part of Vaadin Component Factory.
+
+![vcf-date-time-range-picker](./dtrp-demo.png)
+
+## How to use
 
 ```html
-<vcf-date-time-range-picker label="Enter date range" value="1990-01-28" end-value="1990-01-30">
-</vcf-date-time-range-picker>
+<vcf-date-time-range-picker label="Enter a range" value="1990-12-28T05:15:40;1990-12-30T06:30"></vcf-date-time-range-picker>
 ```
-
-![GIF for fc-menuitem](./Demo.gif)
 
 ## Running demo
 
 1. Fork the `vcf-date-time-range-picker` repository and clone it locally.
 
-1. Make sure you have [npm](https://www.npmjs.com/) installed.
+2. Make sure you have [npm](https://www.npmjs.com/) installed.
 
-1. When in the `vcf-date-time-range-picker` directory, run `npm install` to install dependencies.
+3. When in the `vcf-date-time-range-picker` directory, run `npm install` to install dependencies.
 
-1. Run `npm start` to open the demo.
+4. Run `npm start` to open the demo.
 
 ## Contributing
 
@@ -29,4 +32,9 @@ To contribute to the component, please read [the guideline](https://github.com/v
 
 ## License
 
-Apache License 2.0
+Distributed under Apache Licence 2.0
+
+Date Time Range Picker Web Component is written by Vaadin Ltd.
+
+### Sponsored development
+Major pieces of development of this add-on has been sponsored by multiple customers of Vaadin. Read more about Expert on Demand at: [Support](https://vaadin.com/support) and [Pricing](https://vaadin.com/pricing).
